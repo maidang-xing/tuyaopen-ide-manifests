@@ -34,8 +34,8 @@
 
 输出 5-8 条本次适用护栏，不照搬全量规则：
 
-1. 异步操作使用 `templates/async-state-machine.md` 模板（loading/error/empty/success）
-2. 网络请求使用 `templates/request-wrapper.md` 模板（timeout + retry + error handling）
+1. 异步操作使用 `assets/templates/async-state-machine.md` 模板（loading/error/empty/success）
+2. 网络请求使用 `assets/templates/request-wrapper.md` 模板（timeout + retry + error handling）
 3. 副作用操作必须防重复提交（submitting flag + finally 释放）
 4. setData 使用路径更新，禁止整对象替换
 5. 页面 `onUnload` 清理所有定时器和监听器
@@ -50,8 +50,8 @@
 
 - `references/developer-quality-contract.md`
 - `references/miniapp-best-practices.md`
-- `templates/async-state-machine.md`
-- `templates/request-wrapper.md`
+- `assets/templates/async-state-machine.md`
+- `assets/templates/request-wrapper.md`
 - `anti-patterns.md`
 - 相关规则：`rules/perf-*.md`, `rules/ix-*.md`, `rules/list-*.md`, `rules/content-*.md`, `rules/code-*.md`
 

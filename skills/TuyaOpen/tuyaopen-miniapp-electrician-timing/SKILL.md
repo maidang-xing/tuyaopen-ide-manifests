@@ -87,14 +87,14 @@ description: 将 @ray-js/electrician-timing-sdk 接入业务代码位于 src/* �
 
 ### 延伸阅读
 
-- [docs/integration-guide.md](docs/integration-guide.md)：URL query 表、README ↔ 工程映射、页面路径索引、以及 **[§5 API 注意事项与最佳实践](docs/integration-guide.md#api-best-practices)**。
+- [references/integration-guide.md](references/integration-guide.md)：URL query 表、README ↔ 工程映射、页面路径索引、以及 **[§5 API 注意事项与最佳实践](references/integration-guide.md#api-best-practices)**。
 - [references/astronomical.md](references/astronomical.md)：`@ray-js/ray` 的五个天文 API（add / list / update / updateStatus / remove）、参数语义（`loops`、`offsetType`、`time` 偏移、`bizType`）以及可移植的 TS 辅助函数。用户问到「天文定时 / 日出 / 日落」时阅读。
 
 ## 注意事项 {#tip}
 
 ### API 注意事项与最佳实践
 
-完整表格见 [docs/integration-guide.md §5](docs/integration-guide.md#api-best-practices)。
+完整表格见 [references/integration-guide.md §5](references/integration-guide.md#api-best-practices)。
 
 - **铁律**：所有定时读写**必须**在 `init` 成功之后。统一处理返回结构：`success` / `cancel` / `pass` / `{ conflict, validateData }`。启用路径会跑冲突校验。
 - **`electri.*` / 云 / 倒计时**：要使用默认冲突 UI，须传 **`useDefaultModal: true`**，且当前页面挂载了 `id` 与 `conflictModallId` 匹配的 **`ConflictPopup`**。

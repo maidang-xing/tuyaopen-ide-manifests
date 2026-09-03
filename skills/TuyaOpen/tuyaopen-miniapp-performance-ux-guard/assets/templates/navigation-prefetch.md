@@ -222,4 +222,4 @@ export const useNavigationPrefetchStore = create<State>((set, get) => ({
 - `rules/perf-navigation-prefetch`：本模板对应的 rule
 - `rules/launch-data-prefetch`：启动期静态预取
 - `rules/perf-serial-requests`：同一页面内并行
-- `templates/request-wrapper.md`：请求层 timeout / retry / error 标准封装
+- `assets/templates/request-wrapper.md`：请求层 timeout / retry / error 标准封装

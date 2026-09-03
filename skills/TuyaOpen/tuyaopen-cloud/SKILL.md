@@ -42,14 +42,14 @@ usually not on `PATH`).
 **Still routed through `tuya-devplat-cli` + this skill's Python helpers, no
 `tuyaopen-cli` coverage:** product search and creation, and browsing / adding /
 removing / validating the standard DP catalog. See
-[ops/product.md](ops/product.md) and [ops/manage-dp.md](ops/manage-dp.md).
+[references/product.md](references/product.md) and [references/manage-dp.md](references/manage-dp.md).
 
 ## Operations
 
 | Operation | File |
 |-----------|------|
-| Search / list / create product | [ops/product.md](ops/product.md) |
-| Manage DPs (list / add / remove / validate) | [ops/manage-dp.md](ops/manage-dp.md) |
+| Search / list / create product | [references/product.md](references/product.md) |
+| Manage DPs (list / add / remove / validate) | [references/manage-dp.md](references/manage-dp.md) |
 
 ---
 
@@ -355,7 +355,7 @@ documented above. Don't carry one CLI's confirmation habit into the other.
 | 插座 | `cz` | `wf_ble_cz` | `134001` | Standard DPs 1–100; custom DPs start at 101. |
 | 灯具 | `dj` | `wf_ble_dj` | — (look up via Case A: `custom-list --category-code dj` → `solutionModuleVOS[].code`) | Standard DPs 1–100; custom DPs start at 101. |
 
-For categories not listed, follow the lookup steps in [ops/product.md](ops/product.md).
+For categories not listed, follow the lookup steps in [references/product.md](references/product.md).
 
 > **Note:** `product solution-list` always returns empty — do not use it.
 > Use `product custom-list` or `product communication-list` instead.

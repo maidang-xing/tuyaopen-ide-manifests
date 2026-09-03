@@ -13,7 +13,7 @@ description: 涂鸦 IPC（摄像机）面板小程序模板（panel-ipc / public
 
 ## 概述 {#description}
 
-本技能服务于涂鸦 IPC 摄像机品类 Ray 小程序面板模板的二次开发，覆盖固定/云台/可移动等主流摄像机的全流程开发。核心知识包括：声明式 FeatureMenu/TabBar 数据驱动渲染、`@ray-js/ipc-player-integration` 融合播放器接入、DP 监听与下发约定（`publishDpOutTime` / `useActions` 双轨）、VAS `pageType` 跳转规则、路径巡航 hooks（`useCreatePath` 等）、弹窗 `componentMap` 注册机制。技能通过 `reference/` 子目录对组件、API、Redux、原生路由提供完整签名，SKILL.md 速查表仅用于选型，详细用法以 reference 为准。
+本技能服务于涂鸦 IPC 摄像机品类 Ray 小程序面板模板的二次开发，覆盖固定/云台/可移动等主流摄像机的全流程开发。核心知识包括：声明式 FeatureMenu/TabBar 数据驱动渲染、`@ray-js/ipc-player-integration` 融合播放器接入、DP 监听与下发约定（`publishDpOutTime` / `useActions` 双轨）、VAS `pageType` 跳转规则、路径巡航 hooks（`useCreatePath` 等）、弹窗 `componentMap` 注册机制。技能通过 `references/` 子目录对组件、API、Redux、原生路由提供完整签名，SKILL.md 速查表仅用于选型，详细用法以 reference 为准。
 
 ## 适用场景 {#scene}
 
@@ -36,8 +36,8 @@ description: 涂鸦 IPC（摄像机）面板小程序模板（panel-ipc / public
   - 平台准备：涂鸦 IoT 平台已创建摄像机产品，并在小程序开发者平台「开发设置 → 已授权云能力」手动授权 **IPC 标准能力**。
   - 包管理：Node ≥ 16 + Yarn；命令为 `yarn install` / `yarn start` / `yarn build`。
 - **延伸阅读**：
-  - 字段速查与组件签名：[reference/](./reference/)
-  - 端到端示例：[examples/recipes.md](./examples/recipes.md)
+  - 字段速查与组件签名：[references/](./references/)
+  - 端到端示例：[references/recipes.md](./references/recipes.md)
   - 评估用例：[evals/evals.json](./evals/evals.json)
   - 官方文档：[Codelab](https://developer.tuya.com/cn/miniapp-codelabs/codelabs/panel-ipc/index.html#0) · [Ray](https://developer.tuya.com/cn/miniapp/develop/ray) · [SDM](https://developer.tuya.com/cn/miniapp/develop/ray/sdm/overview)
 - **搭配技能**：通用「TypeScript 重构」「Cursor 项目导览」类技能可叠加；路径巡航开发时建议同时让 agent 索引 `src/features/path-point/` 让 hooks 命中更准。
@@ -61,11 +61,11 @@ description: 涂鸦 IPC（摄像机）面板小程序模板（panel-ipc / public
 
 1. **识别范围**：从需求里圈出要用的 DP、组件、原生页/弹窗、是否触达播放器或路径巡航。
 2. **先读 reference，再写代码**：
-   - 修改任何 `FeatureMenu` / `TabBar` 配置项前，**必须** `Read ./reference/component/layout-feature.md` 或 `layout-footer.md`，核对 type 取值、必填字段、按 type 写 onClick 的标准模式。
-   - 使用 `IPCPlayerIntegration` / `useCtx` / `Features` 前，**必须** `Read ./reference/component/ipc-player-integration.md`。
-   - 使用任何 DP 工具（`publishDpOutTime` / `useProps` / `useActions` / `getDpCodeIsExist` 等）前，**必须** `Read ./reference/api/dp-utils.md`。
-   - 跳转任何 native 页或外部小程序、接 VAS 运营 Banner 前，**必须** `Read ./reference/api/service-hall-and-routes.md`。
-   - 处理路径巡航前，**必须** `Read ./reference/api/path-point-hooks.md`。
+   - 修改任何 `FeatureMenu` / `TabBar` 配置项前，**必须** `Read ./references/component/layout-feature.md` 或 `layout-footer.md`，核对 type 取值、必填字段、按 type 写 onClick 的标准模式。
+   - 使用 `IPCPlayerIntegration` / `useCtx` / `Features` 前，**必须** `Read ./references/component/ipc-player-integration.md`。
+   - 使用任何 DP 工具（`publishDpOutTime` / `useProps` / `useActions` / `getDpCodeIsExist` 等）前，**必须** `Read ./references/api/dp-utils.md`。
+   - 跳转任何 native 页或外部小程序、接 VAS 运营 Banner 前，**必须** `Read ./references/api/service-hall-and-routes.md`。
+   - 处理路径巡航前，**必须** `Read ./references/api/path-point-hooks.md`。
    - 主 SKILL.md 的"速查表"**只用于选型**，不含完整签名，**严禁**据此直接写代码。
 3. **按清单落地**：DP 注册（schema.ts）→ 配置项追加（configData.ts）→ 弹窗组件 + componentMap → i18n（zh/en）→ iconfont → 构建。
 4. **构建验证**：写完必须 `yarn build`，修完所有报错再交付。
@@ -210,10 +210,10 @@ isIntercomSupported boolean        对讲是否支持
 
 ## Critical Rules
 
-- **Must**: 修改 `FeatureMenu` / `TabBar` 配置项前先读 [reference/component/layout-feature.md](./reference/component/layout-feature.md)。
-- **Must**: 使用任何 DP 工具前先读 [reference/api/dp-utils.md](./reference/api/dp-utils.md)。
-- **Must**: 跳转 native 页或外部小程序、接 VAS 运营 Banner 前先读 [reference/api/service-hall-and-routes.md](./reference/api/service-hall-and-routes.md)。
-- **Must**: 路径巡航相关开发先读 [reference/api/path-point-hooks.md](./reference/api/path-point-hooks.md)。
+- **Must**: 修改 `FeatureMenu` / `TabBar` 配置项前先读 [references/component/layout-feature.md](./references/component/layout-feature.md)。
+- **Must**: 使用任何 DP 工具前先读 [references/api/dp-utils.md](./references/api/dp-utils.md)。
+- **Must**: 跳转 native 页或外部小程序、接 VAS 运营 Banner 前先读 [references/api/service-hall-and-routes.md](./references/api/service-hall-and-routes.md)。
+- **Must**: 路径巡航相关开发先读 [references/api/path-point-hooks.md](./references/api/path-point-hooks.md)。
 - **Must**: bool 型功能用 `publishDpOutTime` 下发，并在 `dpListenCallback` 里 `currentItem.hasClick && clearPublishDpOutTime()`。
 - **Must**: 枚举型功能 `onClick` 只负责 `changePanelInfoState('showSmartActionSheet', ...)`；**不要**自己 publish DP（home 已自动处理）。
 - **Must**: popup 型功能除了写组件，**必须**在 `src/config/componentMap.ts` 注册 `componentKey`，否则点击无响应。
@@ -233,17 +233,17 @@ isIntercomSupported boolean        对讲是否支持
 
 ### Component（组件）
 
-- [layout-feature](./reference/component/layout-feature.md) — 主页功能宫格 + FeatureMenu 字段全表 + 按 type 写 onClick
-- [layout-footer](./reference/component/layout-footer.md) — 底部 TabBar 字段全表 + 中心大按钮 + 对讲特殊项
-- [ipc-player-integration](./reference/component/ipc-player-integration.md) — 融合播放器 useCtx / initPlayerWidgets / 横屏行为
-- [path-manager](./reference/component/path-manager.md) — 路径巡航场景栈 UI + Scene 枚举 + 注册到 componentMap
+- [layout-feature](./references/component/layout-feature.md) — 主页功能宫格 + FeatureMenu 字段全表 + 按 type 写 onClick
+- [layout-footer](./references/component/layout-footer.md) — 底部 TabBar 字段全表 + 中心大按钮 + 对讲特殊项
+- [ipc-player-integration](./references/component/ipc-player-integration.md) — 融合播放器 useCtx / initPlayerWidgets / 横屏行为
+- [path-manager](./references/component/path-manager.md) — 路径巡航场景栈 UI + Scene 枚举 + 注册到 componentMap
 
 ### API
 
-- [dp-utils](./reference/api/dp-utils.md) — `publishDpOutTime` / `getDpCodeIsExist` / `getTargetEnumDpActionSheetData` 等 DP 工具
-- [path-point-hooks](./reference/api/path-point-hooks.md) — `useCreatePath` / `usePlayPath` / `useCurrentPlayPoint` 等路径巡航 hooks
-- [service-hall-and-routes](./reference/api/service-hall-and-routes.md) — VAS pageType 6 种跳转规则 + nativePageRoute / miniIdLabs
+- [dp-utils](./references/api/dp-utils.md) — `publishDpOutTime` / `getDpCodeIsExist` / `getTargetEnumDpActionSheetData` 等 DP 工具
+- [path-point-hooks](./references/api/path-point-hooks.md) — `useCreatePath` / `usePlayPath` / `useCurrentPlayPoint` 等路径巡航 hooks
+- [service-hall-and-routes](./references/api/service-hall-and-routes.md) — VAS pageType 6 种跳转规则 + nativePageRoute / miniIdLabs
 
 ### Redux
 
-- [panel-info](./reference/redux/panel-info.md) — panelInfo slice 全部 keys + EventName 跨组件信令
+- [panel-info](./references/redux/panel-info.md) — panelInfo slice 全部 keys + EventName 跨组件信令

@@ -181,43 +181,43 @@ description: "Tuya/涂鸦 sweep robot/扫地机 panel development with proprieta
 注意：`@ray-js/robot-protocol` 和 `@ray-js/robot-data-stream` 两种协议的工程都会引入，不能作为区分依据。关键看实际调用的 API：用 `command_trans` + `encode0x` 就是点阵格式，用 MQTT hooks 就是结构化协议。
 
 #### 地图组件相关（config/方法/回调/类型/props/RobotMap）
-用 Grep 搜索 `docs/references/map-sdk/` 下的文档：
-- 配置相关 → `docs/references/map-sdk/reference/config.md`
-- 方法相关 → `docs/references/map-sdk/reference/methods.md`
-- 回调事件 → `docs/references/map-sdk/reference/callbacks.md`
-- 运行时配置 → `docs/references/map-sdk/reference/runtime.md`
-- 数据格式 → `docs/references/map-sdk/reference/data.md`
-- 类型定义 → `docs/references/map-sdk/reference/types.md`
-- 工具函数 → `docs/references/map-sdk/reference/utils.md`
-- 入门指南 → `docs/references/map-sdk/guide/getting-started.md`
-- 最佳实践 → `docs/references/map-sdk/guide/advanced-usage.md`
+用 Grep 搜索 `references/map-sdk/` 下的文档：
+- 配置相关 → `references/map-sdk/reference/config.md`
+- 方法相关 → `references/map-sdk/reference/methods.md`
+- 回调事件 → `references/map-sdk/reference/callbacks.md`
+- 运行时配置 → `references/map-sdk/reference/runtime.md`
+- 数据格式 → `references/map-sdk/reference/data.md`
+- 类型定义 → `references/map-sdk/reference/types.md`
+- 工具函数 → `references/map-sdk/reference/utils.md`
+- 入门指南 → `references/map-sdk/guide/getting-started.md`
+- 最佳实践 → `references/map-sdk/guide/advanced-usage.md`
 
 #### 点阵格式协议相关（raw 类型/hex/encode/decode/0x指令码/commandTrans）
-用 Grep 搜索 `docs/references/protocol/` 下的文档：
-- 指令编解码 → `docs/references/protocol/reference/commands.md`
-- 地图解码 → `docs/references/protocol/reference/map-decode.md`
-- 路径解码 → `docs/references/protocol/reference/path-decode.md`
-- 类型定义 → `docs/references/protocol/reference/types.md`
-- 工具函数 → `docs/references/protocol/reference/utils.md`
-- 入门指南 → `docs/references/protocol/guide/getting-started.md`
+用 Grep 搜索 `references/protocol/` 下的文档：
+- 指令编解码 → `references/protocol/reference/commands.md`
+- 地图解码 → `references/protocol/reference/map-decode.md`
+- 路径解码 → `references/protocol/reference/path-decode.md`
+- 类型定义 → `references/protocol/reference/types.md`
+- 工具函数 → `references/protocol/reference/utils.md`
+- 入门指南 → `references/protocol/guide/getting-started.md`
 
 #### 结构化协议相关（MQTT/JSON/useXxxClean hooks）
-用 Grep 搜索 `docs/references/data-stream/` 下的文档：
-- MQTT Hooks → `docs/references/data-stream/reference/mqtt-hooks.md`
-- 消息格式 → `docs/references/data-stream/reference/message-format.md`
-- 入门指南 → `docs/references/data-stream/guide/getting-started.md`
+用 Grep 搜索 `references/data-stream/` 下的文档：
+- MQTT Hooks → `references/data-stream/reference/mqtt-hooks.md`
+- 消息格式 → `references/data-stream/reference/message-format.md`
+- 入门指南 → `references/data-stream/guide/getting-started.md`
 
 #### P2P 数据通道（useP2PDataStream/数据连接/P2P）
 P2P 是跨协议的公共能力，用 Grep 搜索：
-- P2P 数据流 → `docs/references/data-stream/reference/p2p-stream.md`
-- useP2PDataStream 详解 → `docs/references/data-stream/useP2PDataStream.md`
+- P2P 数据流 → `references/data-stream/reference/p2p-stream.md`
+- useP2PDataStream 详解 → `references/data-stream/useP2PDataStream.md`
 
 #### 端到端功能实现（"怎么实现选区清扫"、"禁区编辑怎么做"）
-读取 `docs/feature-guides.md`，它提供功能到跨库 API 的映射，帮助你知道该去哪些 reference 文件查找具体的 API 信息。
+读取 `references/feature-guides.md`，它提供功能到跨库 API 的映射，帮助你知道该去哪些 reference 文件查找具体的 API 信息。
 
 ## 注意事项 {#tip}
 
 - reference 文件可能很大（config.md 有 3500+ 行），用 Grep 定位关键词后用 Read（带 offset + limit）只读匹配区域的上下文（约 30-50 行），不要一次性读取整个文件
 - 协议类型判断规则见上方"第一步：识别协议类型"，核心原则：看实际调用的 API，不看 import 的包
-- docs/feature-guides.md 提供的是功能到 API 的映射索引，不是完整实现文档；找到对应 API 后必须去 docs/references/ 下的源文件查参数、类型和用法细节
+- references/feature-guides.md 提供的是功能到 API 的映射索引，不是完整实现文档；找到对应 API 后必须去 references/ 下的源文件查参数、类型和用法细节
 - 开发者的问题可能跨越多个库（如选区清扫同时涉及地图组件回调、协议编码、DP 下发），回答时需要串联多个 reference 文件，不要只回答单个库的部分

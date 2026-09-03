@@ -176,5 +176,5 @@ tuyaopen-cli project bind-product --pid <pid> --yes   # writes tuyaopen.project.
 tuyaopen-cli product sync --yes                       # pulls product detail + DP schema
 ```
 
-Then define the DPs ([ops/manage-dp.md](manage-dp.md)), which has its own
+Then define the DPs ([references/manage-dp.md](manage-dp.md)), which has its own
 "next" section — `dp generate` and the panel check both live there.

@@ -126,7 +126,7 @@ function safeParseJson(s: string): Record<string, unknown> {
 
 天文与本 SDK 正交，但与其共享入口侧基建：
 
-- **入口能力开关**：宿主 URL query 使用 `supportAstronomical=y|n`（见 `docs/integration-guide.md` §1）。建议在存在 `groupId` 时强制**关闭** —— 群组通常无逐设备坐标，天文默认禁用。
+- **入口能力开关**：宿主 URL query 使用 `supportAstronomical=y|n`（见 `references/integration-guide.md` §1）。建议在存在 `groupId` 时强制**关闭** —— 群组通常无逐设备坐标，天文默认禁用。
 - **页面路径**：天文页面落地到 `src/pages/astronomical/`。状态管理与工具函数按工程惯例放置即可，无强制结构。
 - **无 `ConflictPopup`**：这些 API 不接收 `useDefaultModal`，也不会触发 SDK 的冲突流程。**不要**在天文页面挂载 `@ray-js/electrician-timing-sdk` 的 `ConflictPopup`；若天文需要自身冲突语义，请在业务代码中处理。
 - **在线提示**：仍可用 SDK 的 `isLANOnline` / `isLocalOnline` 控制 UI 文案（如「离线 —— 无法编辑」），它们是通用连通性 helper，并非定时专属。

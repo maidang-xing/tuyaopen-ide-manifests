@@ -13,7 +13,7 @@ description: Use this skill for Tuya（涂鸦）照明品类 Ray 小程序面板
 
 ## 概述 {#description}
 
-本技能服务于涂鸦照明品类 Ray 小程序面板的 AI 辅助开发，覆盖白光灯、彩光灯、情景灯等主流灯型的全流程能力。核心知识包括 DP 点映射与类型定义、Complex DP 编解码（colour_data / control_data / scene_data / music_data）、work_mode 分支控制、功能页跳转（定时/断电记忆/灯光渐变/停电勿扰）及 lamp-* 组件选型。技能通过 `reference/` 子目录对组件、API、功能页提供完整签名，SKILL.md 速查表仅用于选型，详细用法以 reference 为准。
+本技能服务于涂鸦照明品类 Ray 小程序面板的 AI 辅助开发，覆盖白光灯、彩光灯、情景灯等主流灯型的全流程能力。核心知识包括 DP 点映射与类型定义、Complex DP 编解码（colour_data / control_data / scene_data / music_data）、work_mode 分支控制、功能页跳转（定时/断电记忆/灯光渐变/停电勿扰）及 lamp-* 组件选型。技能通过 `references/` 子目录对组件、API、功能页提供完整签名，SKILL.md 速查表仅用于选型，详细用法以 reference 为准。
 
 ## 适用场景 {#scene}
 
@@ -46,9 +46,9 @@ description: Use this skill for Tuya（涂鸦）照明品类 Ray 小程序面板
 1. **识别范围**：从需求里圈出要用的 DP、lamp-\* 组件、功能页、云端 code。
 2. **先读 reference，再写代码**：
 
-   - 使用任何 `@ray-js/lamp-*` 组件之前，**必须** `Read ./reference/component/<name>.md`，核对 **import 方式、props 名称、必填项、Constraints**。
-   - 使用任何云端 API 之前，**必须** `Read ./reference/api/<name>.md`。
-   - 跳转任何功能页之前，**必须** `Read ./reference/functionPage/<name>.md`，拿到 `jumpUrl` 与 `presetFunctionalData` 参数。
+   - 使用任何 `@ray-js/lamp-*` 组件之前，**必须** `Read ./references/component/<name>.md`，核对 **import 方式、props 名称、必填项、Constraints**。
+   - 使用任何云端 API 之前，**必须** `Read ./references/api/<name>.md`。
+   - 跳转任何功能页之前，**必须** `Read ./references/functionPage/<name>.md`，拿到 `jumpUrl` 与 `presetFunctionalData` 参数。
    - 主 SKILL.md 的"速查表"**只用于选型**，不含完整签名，严禁据此直接写代码。
 
 3. **按清单落地**：Complex DP 注册 → 能力注册 → global.config.ts → i18n → API → 组件/页面 → 构建。
@@ -436,7 +436,7 @@ const hasSwitchGradient = support.isSupportDp('switch_gradient');
 
 - `@ray-js/ray` **没有 default export**：`import ty from '@ray-js/ray'` ❌。正确做法：按需命名导入 `import { View, Text, navigateTo, getLaunchOptionsSync } from '@ray-js/ray'`。
 - `@ray-js/panel-sdk` 工具函数：`import { utils } from '@ray-js/panel-sdk'`，然后 `utils.decimalToHex()`、`utils.generateDpStrStep()` 等。**禁止** `import { decimalToHex } from '@ray-js/panel-sdk/lib/utils'` 深路径写法。
-- 云端持久化 **必须**通过 `src/api/cloudConfig.ts` 封装，不得直接调用 `@ray-js/ray` 的 `getDeviceProperty` / `setDeviceProperty`（详见 reference/api/cloud-config.md）。
+- 云端持久化 **必须**通过 `src/api/cloudConfig.ts` 封装，不得直接调用 `@ray-js/ray` 的 `getDeviceProperty` / `setDeviceProperty`（详见 references/api/cloud-config.md）。
 - 路由跳转使用 `navigateTo`（来自 `@ray-js/ray`）或功能页内的 `router`；所有 URL 参数使用 `encodeURIComponent`。
 
 ### useActions / useStructuredActions 调用方式（极易写错，一次性对齐）
@@ -470,9 +470,9 @@ actions.switch_led.toggle(); // 切换开关
 
 - **Must**: `useActions` / `useStructuredActions` 返回的对象必须通过 `.set()` 方法调用下发 DP，不能直接当函数调用。正确：`actions.switch_led.set(true)`、`structuredActions.colour_data.set({...})`。错误：`actions.switch_led(true)`、`structuredActions.colour_data({...})`。
 - **Must**: `@ray-js/panel-sdk` 的工具函数（`decimalToHex` / `generateDpStrStep` 等）通过 `import { utils } from '@ray-js/panel-sdk'` 导入后以 `utils.xxx()` 调用；禁止使用深路径 `import { xxx } from '@ray-js/panel-sdk/lib/utils'`。
-- **Must**: 使用任何 `@ray-js/lamp-*` 组件前，先读 `reference/component/<name>.md`，按 reference 抄 import / props。
-- **Must**: 使用任何云端 / 场景 / 音乐 API 前，先读 `reference/api/<name>.md`。
-- **Must**: 跳转任何功能页前，先读 `reference/functionPage/<name>.md`，按 reference 抄 `jumpUrl` 与 `presetFunctionalData` 参数。
+- **Must**: 使用任何 `@ray-js/lamp-*` 组件前，先读 `references/component/<name>.md`，按 reference 抄 import / props。
+- **Must**: 使用任何云端 / 场景 / 音乐 API 前，先读 `references/api/<name>.md`。
+- **Must**: 跳转任何功能页前，先读 `references/functionPage/<name>.md`，按 reference 抄 `jumpUrl` 与 `presetFunctionalData` 参数。
 - **Must**: Complex DP 在 `protocols/index.ts` 注册解析器。
 - **Must**: `onTouchMove` 下发 `control_data`，`onTouchEnd` 才下发真正 DP。
 - **Must**: 开关操作时若 `countdown > 0` 同步清零。
@@ -491,33 +491,33 @@ actions.switch_led.toggle(); // 切换开关
 
 ### 功能页
 
-- [fp-lamp-schedule](./reference/functionPage/fp-lamp-schedule.md) — 照明定时页（含生物节律 / 入睡 / 唤醒 / 循环 / 随机定时）
-- [fp-lamp-dnd](./reference/functionPage/fp-lamp-dnd.md) — 停电勿扰 / 遥控开关（复用）
-- [fp-lamp-power-memory](./reference/functionPage/fp-lamp-power-memory.md) — 断电记忆页
-- [fp-lamp-gradient](./reference/functionPage/fp-lamp-gradient.md) — 灯光渐变页
+- [fp-lamp-schedule](./references/functionPage/fp-lamp-schedule.md) — 照明定时页（含生物节律 / 入睡 / 唤醒 / 循环 / 随机定时）
+- [fp-lamp-dnd](./references/functionPage/fp-lamp-dnd.md) — 停电勿扰 / 遥控开关（复用）
+- [fp-lamp-power-memory](./references/functionPage/fp-lamp-power-memory.md) — 断电记忆页
+- [fp-lamp-gradient](./references/functionPage/fp-lamp-gradient.md) — 灯光渐变页
 
 ### API
 
-- [cloud-config](./reference/api/cloud-config.md) — 云端设备属性存储（颜色预设等）**含 devProperty 底层封装**
-- [color-utils](./reference/api/color-utils.md) — HSV / RGB / 色温颜色转换工具
-- [music-sdk](./reference/api/music-sdk.md) — 音乐律动 SDK
-- [scene-recommend](./reference/api/scene-recommend.md) — 系统推荐场景
+- [cloud-config](./references/api/cloud-config.md) — 云端设备属性存储（颜色预设等）**含 devProperty 底层封装**
+- [color-utils](./references/api/color-utils.md) — HSV / RGB / 色温颜色转换工具
+- [music-sdk](./references/api/music-sdk.md) — 音乐律动 SDK
+- [scene-recommend](./references/api/scene-recommend.md) — 系统推荐场景
 
 ### Component
 
-- [lamp-color-wheel](./reference/component/lamp-color-wheel.md) — 圆形点选色环
-- [lamp-hue-picker](./reference/component/lamp-hue-picker.md) — 环形色相拖拽色盘
-- [lamp-circle-picker](./reference/component/lamp-circle-picker.md) — 圆环通用色盘
-- [lamp-circle-picker-color](./reference/component/lamp-circle-picker-color.md) — 圆形彩光色盘
-- [lamp-circle-picker-white](./reference/component/lamp-circle-picker-white.md) — 圆形白光色温色盘
-- [lamp-rect-picker-color](./reference/component/lamp-rect-picker-color.md) — 矩形彩光色盘
-- [lamp-rect-white-picker](./reference/component/lamp-rect-white-picker.md) — 矩形色温色盘
-- [lamp-bright-slider](./reference/component/lamp-bright-slider.md) — 亮度滑条
-- [lamp-temp-slider](./reference/component/lamp-temp-slider.md) — 色温滑条
-- [lamp-color-slider](./reference/component/lamp-color-slider.md) — 色相滑条
-- [lamp-saturation-slider](./reference/component/lamp-saturation-slider.md) — 饱和度滑条
-- [lamp-color-card](./reference/component/lamp-color-card.md) — 预设色卡
-- [lamp-percent-slider](./reference/component/lamp-percent-slider.md) — 水平百分比滑条
-- [lamp-vertical-percent-slider](./reference/component/lamp-vertical-percent-slider.md) — 竖向百分比滑条
-- [lamp-music-card](./reference/component/lamp-music-card.md) — 音乐律动卡片
-- [tab-bar](./reference/component/tab-bar.md) — 底部固定 Tab 栏
+- [lamp-color-wheel](./references/component/lamp-color-wheel.md) — 圆形点选色环
+- [lamp-hue-picker](./references/component/lamp-hue-picker.md) — 环形色相拖拽色盘
+- [lamp-circle-picker](./references/component/lamp-circle-picker.md) — 圆环通用色盘
+- [lamp-circle-picker-color](./references/component/lamp-circle-picker-color.md) — 圆形彩光色盘
+- [lamp-circle-picker-white](./references/component/lamp-circle-picker-white.md) — 圆形白光色温色盘
+- [lamp-rect-picker-color](./references/component/lamp-rect-picker-color.md) — 矩形彩光色盘
+- [lamp-rect-white-picker](./references/component/lamp-rect-white-picker.md) — 矩形色温色盘
+- [lamp-bright-slider](./references/component/lamp-bright-slider.md) — 亮度滑条
+- [lamp-temp-slider](./references/component/lamp-temp-slider.md) — 色温滑条
+- [lamp-color-slider](./references/component/lamp-color-slider.md) — 色相滑条
+- [lamp-saturation-slider](./references/component/lamp-saturation-slider.md) — 饱和度滑条
+- [lamp-color-card](./references/component/lamp-color-card.md) — 预设色卡
+- [lamp-percent-slider](./references/component/lamp-percent-slider.md) — 水平百分比滑条
+- [lamp-vertical-percent-slider](./references/component/lamp-vertical-percent-slider.md) — 竖向百分比滑条
+- [lamp-music-card](./references/component/lamp-music-card.md) — 音乐律动卡片
+- [tab-bar](./references/component/tab-bar.md) — 底部固定 Tab 栏

@@ -13,7 +13,7 @@ description: 用于开发涂鸦电工插座/排插/智能开关面板小程序�
 
 ## 概述 {#description}
 
-本技能服务于涂鸦电工插座/排插/智能开关品类 Ray 小程序面板的 AI 辅助开发。核心知识包括多路开关动态渲染（switch_1~6）、倒计时控制（countdown_1~6 秒级转 HH:MM 展示）、用电统计（add_ele/cur_power/cur_voltage/cur_current 含换算规则与统计 API）、Complex DP 解析（cycle_time/random_time/switch_inching）、功能页跳转（电工定时/电费设置）、设备操作日志，以及断电记忆/童锁/故障告警等安全保护功能。技能通过 `reference/` 子目录对 API、功能页提供完整签名，SKILL.md 速查表仅用于选型，详细用法以 reference 为准。
+本技能服务于涂鸦电工插座/排插/智能开关品类 Ray 小程序面板的 AI 辅助开发。核心知识包括多路开关动态渲染（switch_1~6）、倒计时控制（countdown_1~6 秒级转 HH:MM 展示）、用电统计（add_ele/cur_power/cur_voltage/cur_current 含换算规则与统计 API）、Complex DP 解析（cycle_time/random_time/switch_inching）、功能页跳转（电工定时/电费设置）、设备操作日志，以及断电记忆/童锁/故障告警等安全保护功能。技能通过 `references/` 子目录对 API、功能页提供完整签名，SKILL.md 速查表仅用于选型，详细用法以 reference 为准。
 
 ## 适用场景 {#scene}
 
@@ -124,11 +124,11 @@ function formatNextTrigger(remainingSeconds: number): string {
 
 ### 功能页
 
-- `socket-panel-development-guidelines/reference/functionPage/fp-electrician-timer.md` — 电工定时页（普通定时 + 倒计时）
-- `socket-panel-development-guidelines/reference/functionPage/fp-electrician-cost.md` — 电费设置页
+- `references/functionPage/fp-electrician-timer.md` — 电工定时页（普通定时 + 倒计时）
+- `references/functionPage/fp-electrician-cost.md` — 电费设置页
 
 ### API
 
-- `socket-panel-development-guidelines/reference/api/electric-stats.md` — 用电统计 API + StatCharts 图表组件
-- `socket-panel-development-guidelines/reference/api/device-log.md` — 设备操作日志查询与展示
+- `references/api/electric-stats.md` — 用电统计 API + StatCharts 图表组件
+- `references/api/device-log.md` — 设备操作日志查询与展示
 

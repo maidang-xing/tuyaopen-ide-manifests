@@ -37,10 +37,10 @@ description: >-
 
 ## 搭配使用 {#usage}
 
-- **目录结构**：本 Skill 位于 `skills/tuyaopen-miniapp-performance-ux-guard/`，目录内直接包含 4 个内部 workflow：`build-guard.md`、`launch-performance.md`、`review-gate.md`、`design-component.md`，以及共用的 `rules/`、`templates/`、`references/`、`anti-patterns.md`、`rubric.md`、`examples.md`。
+- **目录结构**：本 Skill 位于 `skills/tuyaopen-miniapp-performance-ux-guard/`，目录内直接包含 4 个内部 workflow：`build-guard.md`、`launch-performance.md`、`review-gate.md`、`design-component.md`，以及共用的 `rules/`、`assets/templates/`、`references/`、`anti-patterns.md`、`rubric.md`、`examples.md`。
 - **安装与调用**：安装 `tuyaopen-miniapp-performance-ux-guard` 一个 Skill 即可，不要求再安装拆分版独立 Skill；触发后先做场景路由，再进入对应 workflow，不要在总控层直接展开完整审查。
 - **前置依赖**：目标最好是可读取源码的 Tuya miniapp / Ray 项目；若当前上下文缺少仓库代码、设计稿、构建脚本、性能数据或截图证据，只输出可验证假设与缺口，不伪造结论。
-- **资料读取策略**：`anti-patterns.md` 永远优先；其余资料按任务读取。日常开发优先 `templates/` + 对应规则，启动优化优先 `references/wiki-optimizations.md`，设计还原优先 `references/smart-ui-mapping.md` / `references/component-architecture.md` / `references/app-css-variables.md`，发布评审优先 `rubric.md` / `templates/pre-release-checklist.md` / 对应 `rules/<rule-id>.md`。
+- **资料读取策略**：`anti-patterns.md` 永远优先；其余资料按任务读取。日常开发优先 `assets/templates/` + 对应规则，启动优化优先 `references/wiki-optimizations.md`，设计还原优先 `references/smart-ui-mapping.md` / `references/component-architecture.md` / `references/app-css-variables.md`，发布评审优先 `rubric.md` / `assets/templates/pre-release-checklist.md` / 对应 `rules/<rule-id>.md`。
 - **验证方式**：优先运行项目已有的最小范围 lint / build / test；UI 自证默认走 `references/miniapp-devtools-feedback.md` 的 Manual 路径，当前环境存在 DevTools MCP 时再追加自动化截图、快照和日志采集。
 
 ## 注意事项 {#tip}
@@ -87,7 +87,7 @@ description: >-
 
 - `anti-patterns.md`：最高优先级反模式清单
 - `rules/`：62 条离散规则
-- `templates/`：异步状态机、请求包装器、埋点、反馈归因、发布检查清单
+- `assets/templates/`：异步状态机、请求包装器、埋点、反馈归因、发布检查清单
 - `references/miniapp-best-practices.md`：小程序开发最佳实践和体验评分基础检查
 - `references/developer-quality-contract.md`：开发者高质量代码契约
 - `references/wiki-optimizations.md`：Tuya Wiki 启动性能 19 项基线和公共资源缓存补充

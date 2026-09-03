@@ -54,7 +54,7 @@ AI 在生成代码前先输出：
 
 > "帮我写一个页面加载数据的逻辑，需要支持缓存优先和失败重试。"
 
-AI 直接使用 `templates/async-state-machine.md` + `templates/request-wrapper.md` 生成：
+AI 直接使用 `assets/templates/async-state-machine.md` + `assets/templates/request-wrapper.md` 生成：
 
 ```tsx
 import React, { useCallback, useEffect, useState } from 'react'

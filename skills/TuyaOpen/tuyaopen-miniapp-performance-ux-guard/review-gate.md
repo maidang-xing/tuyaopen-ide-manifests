@@ -11,7 +11,7 @@
 - `anti-patterns.md`
 - `references/developer-quality-contract.md`
 - `rubric.md`
-- `templates/pre-release-checklist.md`
+- `assets/templates/pre-release-checklist.md`
 - `references/wiki-optimizations.md`
 - `references/miniapp-best-practices.md`
 - `references/miniapp-devtools-feedback.md`

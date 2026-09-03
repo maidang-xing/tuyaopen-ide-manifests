@@ -17,7 +17,7 @@ description: 为涂鸦 Ray 小程序生成电量统计、电费统计和用电�
 1. **云能力授权**：打开 [小程序开发者平台](https://platform.tuya.com/miniapp/) → `开发设置` → `云能力`，启用智慧能源 API 分组。
 2. **产品激活**：打开 [涂鸦 IoT 开发平台](https://iot.tuya.com/)，为产品开启**电量统计**高级能力。
 
-详细步骤见 [docs/integration-guide.md](docs/integration-guide.md)。
+详细步骤见 [references/integration-guide.md](references/integration-guide.md)。
 
 ### 核心原则
 

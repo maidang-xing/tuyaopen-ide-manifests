@@ -77,7 +77,7 @@ function DetailPage() {
 
 时序：`点击 → fetch(~400ms) ∥ navigate(~200ms) → 详情页 mount → 已有数据 → 渲染`。预取覆盖时总等待 ≈ max(fetch, navigate) ≈ 400ms，省下约 30-50% 等待。
 
-完整 hook 实现见 `templates/navigation-prefetch.md`，包含全局状态库（Redux/Zustand）的等价替代方案。
+完整 hook 实现见 `assets/templates/navigation-prefetch.md`，包含全局状态库（Redux/Zustand）的等价替代方案。
 
 ## 关键陷阱
 
@@ -96,4 +96,4 @@ function DetailPage() {
 - `launch-data-prefetch`：启动期静态参数预取（app 启动时参数已知）
 - `perf-serial-requests`：同一页面内多个无依赖请求并行
 - `ix-async-chain`：异步状态机（loading / error / empty 完整覆盖）
-- `templates/navigation-prefetch.md`：完整 hook 实现 + 全局状态库替代方案
+- `assets/templates/navigation-prefetch.md`：完整 hook 实现 + 全局状态库替代方案
