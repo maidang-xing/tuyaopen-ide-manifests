@@ -30,12 +30,6 @@ related:
   - tuyaopen-miniapp-ray-common
   - tuyaopen-miniapp-smart-ui
   - tuyaopen-miniapp-charts-library
-  - tuyaopen-miniapp-socket-panel
-  - tuyaopen-miniapp-lamp-panel
-  - tuyaopen-miniapp-robot-vacuum
-  - tuyaopen-miniapp-ipc-panel
-  - tuyaopen-miniapp-electrician-timing
-  - tuyaopen-miniapp-energy-stats
   - tuyaopen-miniapp-performance-ux-guard
   - tuyaopen-miniapp-requirement-guide
 ---
@@ -107,7 +101,7 @@ for the current set. Resolve `tuyaopen-cli` first per skill `tuyaopen-start` § 
 | 1. 需求 / PRD | — | `tuyaopen-miniapp-requirement-guide` |
 | 2. 架构理解 / 项目结构 / DP 模型 | [references/architecture.md](references/architecture.md) | — |
 | 2.5 项目本地缓存（`.tuyaopen/platform/`，读 PID / 绑定 / DP）| [references/platform-cache.md](references/platform-cache.md) | — |
-| 3. 品类选型 | — | `tuyaopen-miniapp-lamp-panel` / `tuyaopen-miniapp-socket-panel` / `tuyaopen-miniapp-robot-vacuum` / `tuyaopen-miniapp-ipc-panel` / `tuyaopen-miniapp-electrician-timing` / `tuyaopen-miniapp-energy-stats` |
+| 3. 品类选型（照明 / 插座 / 扫地机 / 摄像机） | [references/categories/](references/categories/) | [按品类查阅对应 README.md](#品类剧本与专项-sdk-已内置在当前技能内) |
 | 3.5 颜色 / 主题 / 视觉基调 | [references/theme-design.md](references/theme-design.md) | — |
 | 4. 编码 — Ray API / 生命周期 / 路由 | — | `tuyaopen-miniapp-ray-common` |
 | 4. 编码 — UI 组件 / 表单 / 弹窗 / 列表 | — | `tuyaopen-miniapp-smart-ui` |
@@ -125,38 +119,20 @@ for the current set. Resolve `tuyaopen-cli` first per skill `tuyaopen-start` § 
 **规则**：先用本 skill 定位 + 基础约束，再按上表派单。AI **不能**跳过本
 skill 直接进品类 skill；也**不能**跳过 conventions 直接写代码。
 
-### 品类 skill 默认没装 —— 这是本节存在的原因
+### 品类剧本与专项 SDK 已内置在当前技能内
 
-上表第 3 步派给的六个品类 skill 属于 `scenario` 安装组，**`tuyaopen-cli skills
-install --all` 不会装它们**。它们互斥：做灯的人同时装上扫地机、IPC、插座的
-手册，不会多出三项能力，只会给 agent 多出三个不相干的候选去挑。
+针对特定垂直品类和高频能力，本技能直接在子目录提供了一整套标准剧本与 SDK 指南。**无需安装外部技能，直接按品类查阅对应子文件**：
 
-所以本表就是它们的**唯一可见入口**。一个没装的 skill 在 agent 的上下文里
-完全不存在 —— 看不到名字、看不到描述、无从"顺便发现"。你现在读到的这张
-表，就是那六个 skill 在被装上之前唯一留下的痕迹。
+| 品类 / 能力 | 查阅入口 | 包含内容 |
+|---|---|---|
+| **照明** | [references/categories/lamp/README.md](references/categories/lamp/README.md) | 白光/彩光/情景/音乐 DP、`@ray-js/lamp-*` 组件选型、`work_mode` 状态机 |
+| **插座 / 排插** | [references/categories/socket/README.md](references/categories/socket/README.md) | 多路开关（`switch_1~6`）、倒计时、电工定时联动、Complex DP 协议 |
+| **扫地机** | [references/categories/robot-vacuum/README.md](references/categories/robot-vacuum/README.md) | 地图 SDK、数据流（P2P/MQTT）、扫地机专有 DP 与协议解析 |
+| **IPC 摄像机** | [references/categories/ipc/README.md](references/categories/ipc/README.md) | 融合播放器、FeatureMenu/TabBar 宫格配置、PTZ、巡航路径 |
+| **电工定时 SDK** | [references/capabilities/electrician-timing/README.md](references/capabilities/electrician-timing/README.md) | `@ray-js/electrician-timing-sdk`：云定时/循环/随机/点动/倒计时 |
+| **电量统计 SDK** | [references/capabilities/energy-stats/README.md](references/capabilities/energy-stats/README.md) | `@tuya-miniapp/cloud-api`：用电/电费统计、峰谷电价、用电成本追踪 |
 
-判断品类后，先装再用：
-
-```bash
-tuyaopen-cli skills install --ids tuyaopen-miniapp-lamp-panel     # 照明
-tuyaopen-cli skills install --ids tuyaopen-miniapp-socket-panel   # 插座 / 电工
-tuyaopen-cli skills install --ids tuyaopen-miniapp-robot-vacuum   # 扫地机
-tuyaopen-cli skills install --ids tuyaopen-miniapp-ipc-panel      # 摄像头 / IPC
-tuyaopen-cli skills install --ids tuyaopen-miniapp-electrician-timing  # 电工定时
-tuyaopen-cli skills install --ids tuyaopen-miniapp-energy-stats   # 能耗统计
-tuyaopen-cli skills install --group scenario                      # 六个全装（少见：一次只做一个品类）
-```
-
-（命令写作裸 `tuyaopen-cli`；若这台机器上它不在 `PATH`，先按 skill
-`tuyaopen-start` § 1 解析一次。）
-
-**装完要让 agent 真正读到它**：新装的 skill 不会进入当前会话的上下文，
-需要重新加载 skill 列表或开一个新会话，再按品类 skill 的内容继续。
-
-**产品品类不在上面六项里**（例如温控器、门锁、传感器）：没有对应的品类
-skill，就留在本 skill + `tuyaopen-miniapp-ray-common` +
-`tuyaopen-miniapp-smart-ui` 里做，**不要**挑一个"最像的"品类 skill 套用 ——
-品类手册里的 DP 语义、组件选型和状态机是按那个品类写死的，套错比没有更糟。
+**产品品类不在上面列表里**（例如温控器、门锁、传感器）：直接基于本技能总流程 + `tuyaopen-miniapp-ray-common` + `tuyaopen-miniapp-smart-ui` 进行定制开发，**不要**挑选一个"最像的"品类剧本套用。
 
 ## 第 0 步是一次提问，不是一格表
 

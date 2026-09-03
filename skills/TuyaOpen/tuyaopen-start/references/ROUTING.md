@@ -87,8 +87,8 @@ one place in this catalogue where a skill may name a sibling skill directly:
 | Skill id | Use when |
 |---|---|
 | `tuyaopen-workflow-product-dev` | **Start here for "I want to build a product".** Platform phase — requirements → product/PID → DPs → `dp generate`. A state machine that resumes from wherever the project stands. Hands the PID + DPs + generated header to the next two |
-| `tuyaopen-workflow-embedded-dev` | Firmware phase — write code → build → flash → write the auth code → provision → read logs / drive the device's serial CLI. Includes the full automated build–flash–monitor–analyze loop |
-| `tuyaopen-workflow-miniapp-dev` | Panel phase — create the miniapp (appid) → code → `preview` and hand the render URL to the user → review → build + upload → submit/publish → bind to the PID. Also owns panel architecture and the coding conventions. **Any mention of 手机 / 手机上 / 手机面板 / 手机 App / 面板 / 小程序 / panel / phone app comes here** — including "手机上能控制/能设/能看", which is the phrasing that got the whole phase skipped in beta round 6 |
+| `tuyaopen-workflow-embedded-dev` | Firmware phase — write code → build → flash → write the auth code → provision → read logs / drive serial CLI. Also covers LVGL screen UI (`references/lvgl/`) and ecosystem library CMake wiring (`references/cmake-dependencies.md`). Includes automated build–flash–monitor–analyze loop |
+| `tuyaopen-workflow-miniapp-dev` | Panel phase — create miniapp (appid) → code → `preview` → review → upload → bind. Contains category playbooks (lighting, socket, robot vacuum, IPC camera under `references/categories/`) and capability SDKs (timing, energy stats under `references/capabilities/`). **Any mention of 手机 / 手机上 / 手机面板 / 手机 App / 面板 / 小程序 / panel / phone app comes here** |
 
 **Pipeline**: `product-dev` → (`embedded-dev` ‖ `miniapp-dev`). The last two are
 independent of each other; both need the platform phase first.
@@ -108,46 +108,7 @@ independent of each other; both need the platform phase first.
 | `tuyaopen-miniapp` | Running the MiniApp CLI: build · install · preview · upload · template · sync-schema · meta |
 | `tuyaopen-miniapp-ray-common` | Ray API/component/lifecycle/routing questions not specific to one category |
 | `tuyaopen-miniapp-smart-ui` | Scaffolding or modifying pages/components with the Ray `smart-ui` library |
+| `tuyaopen-miniapp-charts-library` | Integrating `@ray/charts-library` — electricity/temperature/humidity charts |
 | `tuyaopen-miniapp-requirement-guide` | Project kick-off — capturing user stories, page flows, DP usage plans before implementation |
 | `tuyaopen-miniapp-performance-ux-guard` | Code review / optimization pass against panel performance & UX guardrails |
 
-## Opt-in — the `scenario` group (**not** installed by `--all`)
-
-Narrow-scope playbooks for a specific situation. `tuyaopen-cli skills install
---all` deliberately skips this whole group: the cost of installing a skill is
-not disk, it is the routing decision its description takes part in, and a
-project doing one of these is not doing the other eight.
-
-**This section is the reason they are reachable at all.** An agent tool binds
-its skill roots when it launches, so a skill that was never installed does not
-exist as far as passive discovery is concerned — no name, no description,
-nothing to stumble on. (An agent that runs `tuyaopen-cli skills list --json`
-*does* see them all, installed or not; this table is what covers the agent
-that never thinks to run it.) Decide from the rows below, then install just
-the one you need:
-
-```bash
-tuyaopen-cli skills install --ids <id>          # one playbook
-tuyaopen-cli skills install --group scenario    # all of them (rare)
-```
-
-Newly installed skills are **not** in the current session's context — reload
-the skill list or start a new session before relying on one.
-
-| Skill id | Use when |
-|---|---|
-| `tuyaopen-embedded-lvgl` | Anything LVGL: writing the UI (widgets, Kconfig, **Chinese text** — `LV_FONT_SIMSUN_16_CJK` is not a Chinese font — images, GIFs, fonts that fit in flash), and running it on the host in an SDL2 window instead of reflashing (**Linux only**). Two references split the two halves |
-| `tuyaopen-embedded-dependency` | Wiring a freshly-downloaded PlatformIO ecosystem library into CMakeLists.txt / Kconfig, right after the IDE's Library → Ecosystem download. The IDE also installs this one automatically at that moment |
-| `tuyaopen-miniapp-lamp-panel` | Lighting category panel — bright/temp/colour/scene/music DPs, `lamp-*` components, `work_mode` FSM |
-| `tuyaopen-miniapp-socket-panel` | Socket / power-strip / smart-switch panel — multi-channel switches, countdowns, energy DPs |
-| `tuyaopen-miniapp-robot-vacuum` | Robot vacuum panel — map component, sweep DPs, `@ray-js/robot-*` SDKs |
-| `tuyaopen-miniapp-ipc-panel` | IPC camera panel template — grid layout, integrated player, PTZ, path cruise |
-| `tuyaopen-miniapp-charts-library` | Integrating `@ray/charts-library` — electricity/temperature/humidity charts |
-| `tuyaopen-miniapp-electrician-timing` | Integrating `@ray-js/electrician-timing-sdk` — cloud/cycle/random/inching/countdown timers |
-| `tuyaopen-miniapp-energy-stats` | Energy/electricity-cost statistics via `@tuya-miniapp/cloud-api` — peak-valley pricing, budgets |
-
-> A product category with no playbook here (thermostat, lock, sensor …) stays
-> on `tuyaopen-workflow-miniapp-dev` + `tuyaopen-miniapp-ray-common` +
-> `tuyaopen-miniapp-smart-ui`. **Do not** pick the "closest-looking" category
-> playbook — its DP semantics, component choices and state machines are written
-> for that category, and applying the wrong one is worse than applying none.
