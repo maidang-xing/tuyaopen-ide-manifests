@@ -1,15 +1,14 @@
 ---
 name: tuyaopen-embedded-hardware
-description: Hardware-aware code generation for TuyaOpen embedded projects. Reads the project's confirmed hardware via `tuyaopen-cli
-  hardware list-used`/`board-context` (backed by .tuyaopen/used-peripherals.json + .tuyaopen/board-context.md), confirms the
-  selection with the user, records it BEFORE writing code via `tuyaopen-cli hardware set-used`, then delegates to the matching
-  peripheral sub-skill. 外设初始化、硬件驱动、Vibe Coding、使用外设、硬件相关代码、点灯、点亮 LED、按键、 屏幕、显示、摄像头、音频、录音、播放、触摸、打印、红外、摇杆、灯带、串口、UART、 GPIO、PWM、I2C、SPI、ADC、传感器、引脚、片上外设、发送数据、读取传感器、
-  tuyaopen-cli hardware set-used/list-used/board-context。
+description: Hardware-aware code generation for TuyaOpen embedded projects. Reads the project's confirmed hardware
+  via `tuyaopen-cli hardware list-used`/`board-context` (backed by .tuyaopen/used-peripherals.json + .tuyaopen/board-context.md),
+  confirms the selection with the user, records it BEFORE writing code via `tuyaopen-cli hardware set-used`, then
+  delegates to the matching peripheral sub-skill. 外设初始化、硬件驱动、Vibe Coding、使用外设、硬件相关代码、点灯、点亮 LED、按键、 屏幕、显示、摄像头、音频、录音、播放、触摸、打印、红外、摇杆、灯带、串口、UART、
+  GPIO、PWM、I2C、SPI、ADC、传感器、引脚、片上外设、发送数据、读取传感器、 tuyaopen-cli hardware set-used/list-used/board-context。
 license: Apache-2.0
-compatibility:
-- tuyaopen CLI, either form — see skill `tuyaopen-start` § 1 (for `tuyaopen-cli hardware`/`boards`)
+compatibility: tuyaopen CLI, either form — see skill `tuyaopen-start` § 1 (for `tuyaopen-cli hardware`/`boards`)
 metadata:
-  version: 2.1.2
+  version: 2.1.3
   owner: embedded-team
   deprecated: false
   min-cli-version: 0.1.0-beta.17
@@ -56,7 +55,7 @@ set is a bare device/on-chip id with no pins to record.
 for **this project's already-selected board** — they are unrelated to
 `tuyaopen-cli boards list/detail`, which reads the **published manifest
 catalog** (the same one `tuyaopen-cli project create --board <id>` picks from).
-Don't confuse the two: a custom board you add via skill `tuyaopen-embedded-add-board`
+Don't confuse the two: a custom board you add via the `tuyaopen-start` routing table
 will never show up in `tuyaopen-cli boards list` — that command doesn't read the
 SDK's `boards/` source tree at all.
 

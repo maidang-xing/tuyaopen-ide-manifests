@@ -1,21 +1,15 @@
 ---
 name: tuyaopen-workflow-product-dev
-description: >-
-  End-to-end IoT product development orchestration for TuyaOpen projects.
-  Guides from requirements gathering → Tuya Platform product/DP creation →
-  DP code generation → embedded firmware → **the phone panel (panel
-  mini-app)**, which is what the Tuya app actually shows and is not produced
-  by defining DPs. State-machine: detects project state and picks up from
-  wherever development currently stands. A product is finished when both
-  surfaces exist — firmware AND panel.
-  端到端 IoT 产品开发主工作流：涵盖从需求梳理、涂鸦开发者平台（platform.tuya.com）建产品、
-  查 PID、定义 DP，到固件生成与手机端 Ray 面板小程序全流程。平台资源与 DP 定义也从这里进。
+description: 'End-to-end IoT product development orchestration for TuyaOpen projects. Guides from requirements gathering
+  → Tuya Platform product/DP creation → DP code generation → embedded firmware → **the phone panel (panel mini-app)**,
+  which is what the Tuya app actually shows and is not produced by defining DPs. State-machine: detects project
+  state and picks up from wherever development currently stands. A product is finished when both surfaces exist
+  — firmware AND panel. 端到端 IoT 产品开发主工作流：涵盖从需求梳理、涂鸦开发者平台（platform.tuya.com）建产品、 查 PID、定义 DP，到固件生成与手机端 Ray 面板小程序全流程。平台资源与
+  DP 定义也从这里进。'
 license: Apache-2.0
-compatibility:
-- tuyaopen CLI, either form — see skill `tuyaopen-start` § 1
-- Tuya IoT Platform account (platform.tuya.com)
+compatibility: tuyaopen CLI, either form — see skill `tuyaopen-start` § 1; Tuya IoT Platform account (platform.tuya.com)
 metadata:
-  version: 2.2.1
+  version: 2.2.2
   owner: cloud-team
   deprecated: false
   min-cli-version: 0.1.0-beta.17

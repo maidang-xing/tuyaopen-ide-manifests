@@ -1,16 +1,14 @@
 ---
 name: tuyaopen-embedded-code-check
-description: Check C/C++ code formatting, detect Chinese characters, and validate file headers using clang-format and check_format.py.
-  No `tuyaopen-cli` CLI group covers this — it is this skill's own bundled scripts only. Use when the user mentions code format,
-  lint, clang-format, style check, PR check, or after editing C/C++ files. 代码格式、格式检查、代码风格、PR检查、代码规范 —— 无对应 tuyaopen CLI 命令组，
-  仅靠本 skill 自带脚本。
+description: Check C/C++ code formatting, detect Chinese characters, and validate file headers using clang-format
+  and check_format.py. No `tuyaopen-cli` CLI group covers this — it is this skill's own bundled scripts only. Use
+  when the user mentions code format, lint, clang-format, style check, PR check, or after editing C/C++ files. 代码格式、格式检查、代码风格、PR检查、代码规范
+  —— 无对应 tuyaopen CLI 命令组， 仅靠本 skill 自带脚本。
 license: Apache-2.0
-compatibility:
-- 'clang-format installed (Linux: `apt install clang-format`; macOS: `brew install clang-format`; Windows: `choco install
-  llvm` or an LLVM release)'
-- Python 3 (venv active)
+compatibility: 'clang-format installed (Linux: `apt install clang-format`; macOS: `brew install clang-format`; Windows:
+  `choco install llvm` or an LLVM release); Python 3 (venv active)'
 metadata:
-  version: 1.0.3
+  version: 1.0.4
   owner: embedded-team
   deprecated: false
   min-cli-version: 0.1.0-beta.17
@@ -28,7 +26,7 @@ CLI wrapper; everything in this skill is `tools/check_format.py` (an SDK
 script) plus this skill's own `scripts/check_files.py` wrapper. There is
 nothing to route to `tuyaopen-cli --help` for here.
 
-> **SDK root:** All `$OPEN_SDK_PYTHON tools/check_format.py` commands must be run from the TuyaOpen SDK root (`$OPEN_SDK_ROOT`). The bundled `check_files.py` script resolves the SDK root automatically via `$OPEN_SDK_ROOT` or by walking upward for `.clang-format`. See skill `tuyaopen-embedded-env-setup` if not yet activated.
+> **SDK root:** All `$OPEN_SDK_PYTHON tools/check_format.py` commands must be run from the TuyaOpen SDK root (`$OPEN_SDK_ROOT`). The bundled `check_files.py` script resolves the SDK root automatically via `$OPEN_SDK_ROOT` or by walking upward for `.clang-format`. See the `tuyaopen-start` routing table if not yet activated.
 
 ## Overview
 

@@ -4,11 +4,9 @@ description: 帮助 Agent 在 Ray 小程序中正确集成 `@ray/charts-library`
   涂鸦计量数据源、可组合周期控件（ChartPeriodProvider、ChartGranularityPicker、ChartPeriodNavigator、ChartSeriesPanel、useChartPeriodContext）及图表选项工具函数。适用于用户在
   Ray 小程序页面中添加用电量/温湿度/照度/计量统计图表、构建周期切换图表、使用 withXAxis/withTooltip 自定义图表配置、或将自定义 UI 与库的周期上下文结合使用的场景。
 license: Apache-2.0
-compatibility:
-- Ray framework project with @ray/charts-library or @tuya-miniapp/cloud-api
-- Node.js >= 18
+compatibility: Ray framework project with @ray/charts-library or @tuya-miniapp/cloud-api; Node.js >= 18
 metadata:
-  version: 1.0.4
+  version: 1.0.5
   owner: miniapp-team
   deprecated: false
   min-cli-version: 0.1.0-beta.17
@@ -17,7 +15,7 @@ metadata:
 
 ## No `tuyaopen-cli` CLI coverage
 
-`tuyaopen-cli` CLI 有 `miniapp` 命令组，但只覆盖构建 / 安装运行时 / 元数据 / DP schema 同步 / 预览 / 模板 / 上传等命令行操作（详见 skill `tuyaopen-miniapp`）——具体的页面、组件、DP 交互编码不在其列。本技能的开发知识完全来自 `references/` 与项目内文档，不经 `tuyaopen-cli` CLI。
+`tuyaopen-cli` CLI 有 `miniapp` 命令组，但只覆盖构建 / 安装运行时 / 元数据 / DP schema 同步 / 预览 / 模板 / 上传等命令行操作（详见 the `tuyaopen-start` routing table）——具体的页面、组件、DP 交互编码不在其列。本技能的开发知识完全来自 `references/` 与项目内文档，不经 `tuyaopen-cli` CLI。
 
 
 ## 概述 {#description}

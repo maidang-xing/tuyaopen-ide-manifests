@@ -1,16 +1,14 @@
 ---
 name: tuyaopen-miniapp-performance-ux-guard
-description: 'Reviews and improves Tuya 小程序/miniapp/Ray quality in one package: build guardrails, launch/first-screen performance,
-  release review gates, and design-to-code/component architecture. Use when implementing or modifying pages/components/forms/lists/dialogs/async
-  flows; fixing bugs, UI, interaction, loading/error/empty states, or i18n copy; optimizing 启动性能、首屏、白屏、FMP、包体积、分包、预加载、骨架屏、数据预取、缓存、CDN、Smart
-  UI 按需加载、Ray 通信、react-dom、内存缓存; doing review、上线前检查、准入、release gate、quality grade、召回、体验度量、埋点闭环、告警阈值; or working from MasterGo、设计稿、UI还原、组件拆分、Smart
-  UI、Dialog、Overlay、ActionSheet、弹窗、抽屉、底部面板.'
+description: 'Reviews and improves Tuya 小程序/miniapp/Ray quality in one package: build guardrails, launch/first-screen
+  performance, release review gates, and design-to-code/component architecture. Use when implementing or modifying
+  pages/components/forms/lists/dialogs/async flows; fixing bugs, UI, interaction, loading/error/empty states, or
+  i18n copy; optimizing 启动性能、首屏、白屏、FMP、包体积、分包、预加载、骨架屏、数据预取、缓存、CDN、Smart UI 按需加载、Ray 通信、react-dom、内存缓存; doing review、上线前检查、准入、release
+  gate、quality grade、召回、体验度量、埋点闭环、告警阈值; or working from MasterGo、设计稿、UI还原、组件拆分、Smart UI、Dialog、Overlay、ActionSheet、弹窗、抽屉、底部面板.'
 license: Apache-2.0
-compatibility:
-- Ray framework project with build assets
-- Node.js >= 18
+compatibility: Ray framework project with build assets; Node.js >= 18
 metadata:
-  version: 1.0.3
+  version: 1.0.4
   owner: miniapp-team
   deprecated: false
   min-cli-version: 0.1.0-beta.17
@@ -19,7 +17,7 @@ metadata:
 
 ## No `tuyaopen-cli` CLI coverage
 
-`tuyaopen-cli` CLI 有 `miniapp` 命令组，但只覆盖构建 / 安装运行时 / 元数据 / DP schema 同步 / 预览 / 模板 / 上传等命令行操作（详见 skill `tuyaopen-miniapp`）——具体的页面、组件、DP 交互编码不在其列。本技能的开发知识完全来自 `references/` 与项目内文档，不经 `tuyaopen-cli` CLI。
+`tuyaopen-cli` CLI 有 `miniapp` 命令组，但只覆盖构建 / 安装运行时 / 元数据 / DP schema 同步 / 预览 / 模板 / 上传等命令行操作（详见 the `tuyaopen-start` routing table）——具体的页面、组件、DP 交互编码不在其列。本技能的开发知识完全来自 `references/` 与项目内文档，不经 `tuyaopen-cli` CLI。
 
 
 ## 概述 {#description}

@@ -1,24 +1,21 @@
 ---
 name: tuyaopen-workflow-miniapp-dev
-description: 'The panel-miniapp phase of TuyaOpen product development, end to end: create the miniapp and get an appid, pick
-  a category, write the panel, hand the user a render URL to review, upload, then submit / publish / bind — create, next-version,
-  review-status and release run through the CLI; submit-for-review and bind-to-product are human web steps, with their URLs
-  constructed. Owns the phase order and the panel architecture and coding rules, and dispatches to the sub-skills (ray-common,
-  smart-ui, charts-library, the category playbooks, performance-ux-guard, requirement-guide) for depth. Entered for any panel
-  miniapp task, or handed over from `tuyaopen-workflow-product-dev` once a PID and DPs exist. Per-command flags and gating
-  are in skill `tuyaopen-miniapp`. Covers every panel category the catalogue has a playbook for — lamp / lighting, socket,
-  robot vacuum, IPC camera, electrician timing, energy and power statistics — plus charts, performance and UX review. **触发词**：手机、手机上、手机面板、手机
-  App、面板、面板小程序、小程序、 panel、mini-app、miniapp、phone、app —— 用户提到用手机控制设备、在手机上看/设、 或者直接说面板/小程序，都是本阶段。**「手机面板」最容易被误读**成涂鸦按 DP 自动生成的通用面板而整个跳过（实测：第六轮定义了六个
-  DP、从没建过面板、 全程没有一步提示缺了什么）——定义 DP 不产生面板，面板是独立的一个阶段。 面板小程序阶段的完整工作流：创建小程序拿 appid → 选品类 → 写代码 → 把渲染链接交给用户 review → 上传 → 提审 /
-  发布 / 绑定产品（建小程序、算版本号、 查审核状态、发布都走命令行；提审和绑产品只能人去网页做，含拼好参数的 URL）。 同时承载面板架构与编码铁律，并按需分派到子技能。 覆盖目录里有品类剧本的每一类面板 —— 灯、照明、插座、扫地机、扫地机器人、
-  IPC 摄像头、电工定时、能耗与电量统计 —— 以及图表、UI 组件库、性能与 UX 走查。 单条命令的参数与门禁见 skill tuyaopen-miniapp。'
+description: 'The panel-miniapp phase of TuyaOpen product development, end to end: create the miniapp and get an
+  appid, pick a category, write the panel, hand the user a render URL to review, upload, then submit / publish /
+  bind — all run through the CLI (create, next-version, ui-info-set, submit-review, review-status, release, ui-list,
+  bind); constructed web URLs serve as fallback. Owns the phase order and the panel architecture and coding rules,
+  and dispatches to the sub-skills (ray-common, smart-ui, charts-library, the category playbooks, performance-ux-guard,
+  requirement-guide) for depth. Entered for any panel miniapp task, or handed over from `tuyaopen-workflow-product-dev`
+  once a PID and DPs exist. Per-command flags and gating are in skill `tuyaopen-miniapp`. Covers every panel category
+  the catalogue has a playbook for — lamp / lighting, socket, robot vacuum, IPC camera, electrician timing, energy
+  and power statistics — plus charts, performance and UX review. **
+
+  触发词**：手机、手机上、手机面板、手机 App、面板、面板小程序、小程序、 panel、mini-ap...'
 license: Apache-2.0
-compatibility:
-- tuyaopen CLI, either form — see skill `tuyaopen-start` § 1 (for `tuyaopen-cli miniapp`/`panel`)
-- Node.js >= 18 and npm
-- A TuyaOpen project with MiniApp enabled
+compatibility: tuyaopen CLI, either form — see skill `tuyaopen-start` § 1 (for `tuyaopen-cli miniapp`/`panel`);
+  Node.js >= 18 and npm; A TuyaOpen project with MiniApp enabled
 metadata:
-  version: 2.7.1
+  version: 2.7.2
   owner: miniapp-team
   deprecated: false
   min-cli-version: 0.1.0-beta.17
@@ -29,7 +26,7 @@ metadata:
 
 本技能负责**阶段顺序**：哪一步该跑哪条命令、每步交付什么、哪几步只能人做。
 每条命令的参数、门禁与报错在 skill `tuyaopen-miniapp` —— 包括 `devplat exec`
-转发平台侧 `panel …` 的写法；平台侧凭据本身在 skill `tuyaopen-cloud`。
+转发平台侧 `panel …` 与 `miniapp …` 的写法；平台侧凭据本身在 skill `tuyaopen-cloud`。
 
 | 阶段 | Command |
 |---|---|
@@ -40,8 +37,7 @@ metadata:
 | 构建 | `tuyaopen-cli miniapp build` |
 | **跑起来，把渲染链接交给用户** | `tuyaopen-cli miniapp preview` |
 | 上传版本 | `tuyaopen-cli miniapp upload` (P2) |
-| 平台侧：建小程序 / 算版本号 / 查审核状态 / 发布上线 | `tuyaopen-cli devplat exec` (P2) — 转发给 `tuya-devplat-cli panel …` |
-| 平台侧：**提审**、**把面板绑到产品** | 没有命令，**人去网页做** —— 原因和网址见下文《提审与绑定为什么只能人做》 |
+| 平台侧：建小程序 / 算版本号 / 提审 / 查审核状态 / 发布上线 / 绑定 PID | `tuyaopen-cli devplat exec` (P2) — 转发给 `tuya-devplat-cli miniapp …` 与 `panel …`（含网页兜底） |
 
 Flags aren't listed here — run `tuyaopen-cli schema get --group <g> --command <c>`
 for the current set. Resolve `tuyaopen-cli` first per skill `tuyaopen-start` § 1
@@ -77,10 +73,7 @@ for the current set. Resolve `tuyaopen-cli` first per skill `tuyaopen-start` § 
 
 ## 分派表：流程阶段 + 子技能
 
-从零到上线的每一步都标出：在本 skill 内解决，还是跳到哪个子技能。**只有两步
-没有命令行入口** —— 提审、把面板绑到产品 —— 必须人去网页做，原因和网址见下面
-的专节。创建小程序、算版本号、查审核状态、发布上线**都有命令**（经
-`tuyaopen-cli devplat exec` 转发）。
+从零到上线的每一步都标出：在本 skill 内解决，还是跳到哪个子技能。全流程均支持命令行程序化闭环（创建小程序、算版本号、提审、查审核状态、发布上线、绑定产品均由 `tuyaopen-cli devplat exec` 转发平台 CLI 执行）；当缺少前置或需人工介入时，提供拼好参数的网页直达链接作为兜底。
 
 > 这张表在 2026-08-24 之前从第 1 步"需求"开始，**漏掉了第 0 步和第 5 步** ——
 > 拿 appid 和"把渲染链接交给用户"这两件事当时只写在 skill `tuyaopen-miniapp`
@@ -104,9 +97,9 @@ for the current set. Resolve `tuyaopen-cli` first per skill `tuyaopen-start` § 
 | 7. 上传自检 | [references/upload-checklist.md](references/upload-checklist.md) + `scripts/validate.mjs` | — |
 | 7.5 算下一个版本号 | `panel miniapp-next-version` —— 先拿到号，第 8 步的 `--version` 就是它返回的 `nextVersion` | `tuyaopen-miniapp` |
 | 8. 上传（内测包） | — | `tuyaopen-miniapp`（`tuyaopen-cli miniapp upload --version <nextVersion>`，命令行可做） |
-| **9. 提审** | **只能人在网页上做** —— 见下文《提审与绑定为什么只能人做》，那里有拼好参数的网址 | — |
+| **9. 提审** | 命令行优先：`miniapp ui-info-set`（设置四项属性） + `miniapp submit-review`（提交审核）；若宿主缺少命令或图片未就绪走网页提审（带拼好参数的网址） | `tuyaopen-miniapp` |
 | 9.5 查审核状态 → 发布上线 | 命令行可做：`panel miniapp-version-status` 轮到审核通过，再 `panel miniapp-release` | `tuyaopen-miniapp`（前置、失败码、别用 `-wait` 变体） |
-| **10. 绑定面板小程序到产品** | **只能人在网页上做**，且必须在 9.5 发布之后 —— 见下文同一节 | — |
+| **10. 绑定面板小程序到产品** | 命令行优先：`panel ui-list --product-id <PID> --code PRIVATE` 查询 `uiId`，再 `panel bind --ui-id <uiId> --product-id <PID>`；异常时走网页绑定（带拼好参数的网址） | `tuyaopen-miniapp` |
 | —— 找文档 / 查 API / 查报错 | [references/info-lookup.md](references/info-lookup.md)（`search_help.py` / `fetch_doc.py` / `validate.mjs`） | — |
 
 **规则**：先用本 skill 定位 + 基础约束，再按上表派单。AI **不能**跳过本
@@ -170,8 +163,8 @@ tuyaopen-cli miniapp meta set-appid <appid>
 | `coded` | 页面已按需求改写，`dist/` 不存在或过期 | ⑦ build |
 | `built` | `dist/tuya/app.js` 存在 | ⑧ preview → **交链接给用户，等他看** |
 | `reviewed` | 用户看过预览并认可 | ⑨ upload |
-| `uploaded` | `upload` 成功 | ⓓ 提审（人）→ ⓔ 查状态 → ⓕ 发布（命令）→ ⓖ 绑定（人） |
-| `bound` | 面板已在网页上绑到产品 | 完 |
+| `uploaded` | `upload` 成功 | ⓓ 提审（CLI 或网页）→ ⓔ 查状态（命令）→ ⓕ 发布（命令）→ ⓖ 绑定（CLI 或网页） |
+| `bound` | 面板已绑定到产品 | 完 |
 
 `appid` 是否已 `meta set-appid`，从 `.tuyaopen/` 读，与上面的状态正交 ——
 没有它，`built` 之后一步都走不了。
@@ -184,9 +177,9 @@ tuyaopen-cli miniapp meta set-appid <appid>
 - [ ] **用户拿到过一个能打开的渲染链接，并且看过**（拿不到时见 ⑧ 的降级方案）
 - [ ] `upload` 成功
 - [ ] `panel miniapp-next-version` 的号用在了 `upload --version` 上
-- [ ] **提审链接已交给用户**，并说清这一步只能他自己做
+- [ ] **提审已完成**（命令行 `submit-review` 提交，或已交由用户网页提审）
 - [ ] 审核通过后 `panel miniapp-release` 已跑过，结果照实报（`published` 是真是假）
-- [ ] **绑定链接已交给用户**（`id=` 填的是产品 PID），并说清必须在发布之后
+- [ ] **面板已绑定到产品 PID**（命令行 `panel bind` 绑定，或已交由用户网页绑定）
 
 **卡住是合法结局，沉默不是。** 任何一条为假，就说清是哪一条、卡在哪里，
 并把已完成的部分连同证据一起交付 —— 不要写成"全流程完成"。
@@ -214,10 +207,10 @@ tuyaopen-cli miniapp meta set-appid <appid>
 ⑧ preview --emit-url  ← ★ 变成用户能打开的链接 ★
                                                   ⓒ panel miniapp-next-version → 拿 nextVersion
 ⑨ upload --version <nextVersion>    ← P2，要 appid
-                                                  ⓓ 提审 —— ★ 人去网页做 ★
+                                                  ⓓ miniapp ui-info-set & submit-review → 提审（或网页兜底）
                                                   ⓔ panel miniapp-version-status → 轮到审核通过
                                                   ⓕ panel miniapp-release → 上线
-                                                  ⓖ 绑面板到产品 —— ★ 人去网页做 ★
+                                                  ⓖ panel ui-list & panel bind → 绑定 PID（或网页兜底）
 ```
 
 **前置关系，不满足就不要硬跑**（命令会自己告诉你，但白跑一次是白跑）：
@@ -225,333 +218,12 @@ tuyaopen-cli miniapp meta set-appid <appid>
 `⑤` 要 ⓑ 先做（appid 只能由平台签发）；`ⓒ` 要在 `⑨` **之前**跑，它算出来的号就是 `⑨` 的 `--version`；
 `ⓕ` 要 `ⓔ` 报审核通过。
 
-**右边那一列有两步是人做的，其余是命令。** ⓓ 提审和 ⓖ 绑定不是"还没找到命令"，
-是它们的输入在这条链上根本不存在 —— 原因、网址、以及两个「绑定」的区别，
-都在下面的《创建 → 发布 → 绑定 PID 的完整链路》一节，动手前先读它。
+**右边那一列均有对应命令行操作，且提供网页直达链接作为兜底。** 提审（`miniapp ui-info-set` + `submit-review`）与绑定（`panel ui-list` + `bind`）的参数获取与命令写法，见下面的《创建 → 发布 → 绑定 PID 的完整链路》一节。
 
 ## 做完要给用户一个能打开的渲染链接
 
-<code data-type="tag" style="color:#ff4d4f">第二轮的直接反馈：面板"编译成功"了，用户一次都没看见它长什么样</code>
+> The end-to-end release flow, preview handoff, CLI automation/fallback details, and rejection checklist live in [references/END_TO_END_RELEASE_FLOW.md](references/END_TO_END_RELEASE_FLOW.md). Read it when coding is complete or you are publishing/binding the panel.
 
-`build` 产出的是一个 `dist/`，**没有人能看**。把它变成能看的东西是 `preview`：
-
-```bash
-tuyaopen-cli miniapp preview --emit-url
-```
-
-它会在 dev server 就绪的那一刻，往 **stdout** 打一行
-
-```json
-{"event":"preview_url","url":"http://127.0.0.1:<port>/#/pages/…"}
-```
-
-然后**阻塞住**（server 得活着，链接才有效）。所以：
-
-1. **拿到那行就立刻把 URL 交给用户**，让他在浏览器里打开 —— 别等命令结束，它不会结束。
-2. 人类可读的提示走 stderr，别去解析它；`--emit-url` 那一行才是机器通道。
-3. 想**自己**确认渲染对不对，用 `preview --screenshot <path>`：它截一张 PNG 然后**退出**，
-   信封里同时带 `url` 和 `screenshot` 路径。这条是给你看的，`--emit-url` 那条是给用户的。
-4. 结束预览就 Ctrl+C（或杀掉进程）。用户还要看的时候别提前关掉。
-
-> **别只报告"编译成功"。** 一个用户看不见的面板，对他等于没做。`miniapp build` 成功时的
-> 信封里已经带了 `nextStep`，直接照它做。
-
-> **`preview` / `install` 在独立 CLI 上也能跑了（0.1.0-beta.14 起）。**
-> 此前不行：npm 包不带共享运行时，`preview` 会拿到
-> `{"ok":false,"error":"MiniApp runtime not ready: miniapp.runtime.error.vendorMissing"}`，
-> `install` 会要 `--extension-path`。**现在包里带了**，CLI 默认就从自己的安装目录找。
->
-> 首次 `miniapp install --yes` 约 30s（铺开内置 tarball + 拉公网传递依赖），之后走缓存。
->
-> **版本低于 beta.14 时**才需要下面的降级方案。判据是跑一句
-> `tuyaopen-cli miniapp install --dry-run --json` 看 `runtimeVendorPresent`：
-> `true` 就直接往下走；`false` 说明这份安装缺 payload，报的是
-> `config:runtime_vendor_missing` 并会**打印它查过的路径**。
->
-> **撞到这堵墙时不要放弃整条链**（第四轮就是这么丢掉 ⑨ 和 ⓑ–ⓖ 的）。降级方案：
-> 1. 升级 CLI：`npm i -g @tuya/tuyaopen-cli --registry https://registry-npm.tuya-inc.top/`；或
-> 2. 在 TuyaOpen IDE 里打开这个工程跑预览；或
-> 3. 跳过 ⑧，直接 ⑨ `upload`，让用户用手机扫**内测版二维码**在真机上看 ——
->    真机预览本来就比 mock bridge 更接近真实；
-> 4. 无论走哪条，**都要明确告诉用户"面板你还没看过"**，别让"build 成功"
->    冒充"面板做好了"。
-
-**预览里看到的设备是模拟的**：它注入一个 mock bridge，DP 来自已绑定产品（有 pid 时）或
-模板自己的 `src/devices/schema.ts`。stderr 上会写清这次用的是哪一种、几个 DP ——
-**如果只有 1 个 DP，DP 驱动的 UI 就不会渲染**，那不是渲染 bug，是该先 `bind-product` +
-`sync-schema`（顺序表里的 ⑤）。
-
-## 创建 → 发布 → 绑定 PID 的完整链路 —— 四步是命令，两步是人
-
-`tuyaopen-cli` 自己没有平台侧命令，但 `tuya-devplat-cli` 的 `panel` 组里有，
-经 `tuyaopen-cli devplat exec` 转发即可。**本节只排顺序**；wrapper 长什么样、
-每条命令的入参出参、状态码表、失败形态、超时，全在 skill `tuyaopen-miniapp`。
-
-| # | 步骤 | 谁做 | 用什么 |
-|---|---|---|---|
-| ⓑ | 建小程序，拿 appid | 命令 | `panel create-miniapp`；返回的 `miniProgramId` **就是** appid，随后 `tuyaopen-cli miniapp meta set-appid <appid>` 记进项目 |
-| ⓒ | 算下一个版本号 | 命令 | `panel miniapp-next-version`，**在 upload 之前**跑，把 `nextVersion` 喂给 `upload --version` |
-| ⓓ | **提审** | **人（网页）** | `https://platform.tuya.com/miniapp/version?miniProgramId=<appid>` |
-| ⓔ | 查审核状态 | 命令 | `panel miniapp-version-status`，agent 自己隔一会儿查一次 |
-| ⓕ | 发布上线 | 命令 | `panel miniapp-release`，前置是 ⓔ 报审核通过；全量 100%，不是灰度 |
-| ⓖ | **把面板绑到产品** | **人（网页）** | `https://platform.tuya.com/pmg/step?id=<PID>&tab=operation#PRIVATE` —— `id=` 是**产品 PID**，永远不是 appid |
-
-**`tuyaopen-cli schema list` 是 `tuyaopen-cli` 的权威，不是另一个 CLI 的权威。**
-用它证明 `tuyaopen-cli miniapp publish` 不存在是对的；用它推断"平台侧没有命令行
-办法"就错了 —— 内测第二轮完全没走到 create→bind，一半原因就是旧文案叫 agent
-别去找。走 `tuyaopen-cli devplat exec`（见 skill `tuyaopen-miniapp` 与 `tuyaopen-cloud`）。
-
-### 提审与绑定为什么只能人做 —— 这是结论，不是"还没试过"
-
-<code data-type="tag" style="color:#ff4d4f">2026-09-02 逐行读 vendored tuya-devplat-cli 的源码得出，不是读 --help</code>
-
-**提审 —— 对手写面板在结构上就不可能。** `panel miniapp-submit-version-review`
-这条命令存在，但它要 `--conversation-id`，而它拼出去的请求体里
-**conversationId 是唯一标识"要发布哪份代码"的字段**：`miniappId` 只用来查版本号，
-根本不进请求体。服务端压缩上传的是**那次 AI 会话的工作区**，
-`tuyaopen-cli miniapp upload` 产出的东西一点都不参与。conversationId 只来自
-`panel ai-create` —— 也就是"让 AI 替你写这个面板"的那条路。此外还有一道
-`PANEL_IMAGE_REQUIRED` 硬前置（封面图由人在网页面板预览页点相机按钮生成）和一个
-IDE 从不设置的沙箱 `--project-id`。miniprogram 平台那一侧**根本没有提审接口**，
-唯一入口就是这条 AI 会话上传。⇒ 手写面板的提审，人去网页做。
-
-**绑定 —— 命令是真的，但它的入参拿不到。** `panel bind --ui-id <uiId> --product-id <PID>`
-存在且能用，但 `--ui-id` **不是 appid**：它是一个 Panel UI ID，发布之后才存在，
-且由 AI 面板 / 沙箱产物那条路铸出来（`panel artifact-detail --project-id <sandboxProjectId>`
-→ `artifactPanel.uiId`）。手写面板在这个 CLI 里**没有任何东西产出这个值**。
-`panel ui-list` 会不会列出它、列在哪个字段下，**从源码看不出来，没有验证过** ——
-照实这么说，不要猜一个字段名出来。⇒ 手写面板的绑定，人去网页做。
-
-**这两条不是"权限不够"。** 权限不够长的是另一副样子，必须先读
-skill `tuyaopen-cloud` 的 Trap 1：`panel --help` **按你的授权集过滤**，
-实测在未授权账号上它只列 7 条、**不列 `bind`**，而 `bind` 是存在的。
-请求一条没权限的命令返回
-
-```json
-{"ok":false,"code":"API_NOT_AUTHORIZED","error":"Not authorized: 'panel bind' is not in your authorized API set. Do NOT retry…"}
-```
-
-**把它读成「去找开发者要这个 API 的权限」，绝不要读成「这个命令不存在」，也不要重试。**
-第二轮完全没走到 create→bind，一半原因就是本节旧文案叫它别找。
-
-### 两个都叫「绑定」的东西，不是一回事
-
-这是这条链上最容易错的一步：
-
-| | `tuyaopen-cli project bind-product --pid <pid>` | `tuya-devplat-cli panel bind --ui-id <uiId> --product-id <pid>` |
-|---|---|---|
-| 改的是 | **本地**：`tuyaopen.project.ini` 的 `[product]` | **平台**：产品上挂哪个面板 |
-| 谁需要它 | `miniapp sync-schema`、DP 代码生成 | 手机 App 打开这个产品时显示哪个面板 |
-| 不做的后果 | 本地拿不到 DP，schema 是占位的 | App 里看不到你的面板 |
-
-**两个都要做，顺序是先本地再平台。** 右边那一列对手写面板**只能人在网页上做**：
-`--ui-id` **不是** appid，`panel create-miniapp` 的返回里也没有它（它只给
-`miniProgramId` 和 `miniappName`），上一节写了它为什么拿不到。
-
-### 三条硬性注意事项（都来自 devplat-cli 自己的文档）
-
-1. **一个沙箱项目一辈子只能有一个 miniProgramId。** 调 `create-miniapp` 之前**永远先找现有的**。
-2. **不要从 `extendInfo.miniProgramId` 或 `resourceId` 猜 miniappId** —— 老数据很杂。
-   正确反查链：`sandbox/resource/query {resourceTypes:['panel']}` → `extendInfo.conversationId`
-   → `panel ai-status --conversation-id <cid>` → `miniapp_id`。只有这条链查不到才 `create-miniapp`。
-3. **一个产品同时只能绑一个面板**，绑新的会替换旧的（`panel bind` 自带预检，会把被替换的面板信息
-   一并返回；`--force` 跳过预检）。
-
-> **一个尚未确认的边界，别当成已知**：这些 `panel miniapp-*` 命令的文案写的是
-> 「Create a new miniapp for a product (**Vision**)」并反复提到**沙箱**。它们在一个用
-> `product create` 建出来的普通 TuyaOpen 产品上是否同样适用，**没有验证过**。
-> 所以顺序是：**先试命令**；`API_NOT_AUTHORIZED` → 去要这个 API 的权限；
-> 报错指向沙箱 / Vision → 退回网页那条路，并把那条错误原文记进反馈。
-> **不要因为它写着 Vision 就不试**，也不要假装它一定能用。
-
-## 人做的那两步：要拼好参数的 URL
-
-提审和绑定既不在本 skill、也不在 `tuyaopen-cli` CLI、也不在 IDE 内——开浏览器去涂鸦
-开发者平台做。AI 走到这两步时必须**明确告诉用户"这一步要你去网页"并给出拼好参数的
-网址**，不要停在这里干等，更不要编一条
-`tuyaopen-cli miniapp publish` / `submit` / `review` / `bind` 之类的命令——
-`tuyaopen-cli` 的 `miniapp` 组只有 `build` / `install` / `meta` / `preview` /
-`sync-schema` / `template` / `upload` 七条，跑 `tuyaopen-cli schema list --json`
-可以自己核实。**平台侧那几条走 `tuyaopen-cli devplat exec` 转发，不在这个组里。**
-
-**网址要带参数拼好，不要丢一个光秃秃的首页过去。** IDE 就是在点击时把参数拼
-进 URL 的（`src/host/externalLinkHandlers.ts`），一点直达那一页那一个 tab；
-只给基础域名等于让用户自己去几十个产品、几十个小程序里翻。
-
-> **`upload` 成功的信封自己带着这些 URL。** `data.webSteps` 里是拼好参数的
-> `versionPageUrl`（版本管理页 —— 提审在这里，发布也可以在这里）与
-> `bindProductUrl`（绑产品）、`order`（顺序）、`pairingPrereqs`（配网前提），
-> `next_steps` 是同两条 URL，`hint` 把这些连成一段可以直接念给用户的话。
-> 发布这一步现在也可以不开浏览器 —— `panel miniapp-release` 就是它。
-
-### ⚠ 顺序是硬的：发布 → 绑定 → 才配网
-
-**先配网会拿到品类默认面板**，你刚做的那个不会出现，手机上也不会有任何提示说明原因，
-**只能删掉设备重新配网**。所以这几步必须在用户动手配网**之前**就说清楚：
-
-1. 提审（**人去网页**）→ 审核通过 → 发布（`panel miniapp-release`，命令）
-2. 把**已发布**的面板绑定到产品（**人去网页**）
-3. **然后**才让用户去手机配网
-
-发布这一步换成了命令，**并不改变这个顺序** —— 绑定绑的仍然是一个已经上线的面板。
-
-内测第八轮就是把「去配网」和「去提审绑定」放在同一段里讲的，没有说顺序要紧。
-
-### ⚠ 配网还需要三样东西齐全
-
-智能生活 / 涂鸦智能 App 的「添加设备」要 **PID + UUID + AuthKey** 三者齐备，缺任何一个
-都会在添加环节失败，而且**报错不会指回这里**。让用户去配网之前先确认：
-
-- 产品 PID —— `tuyaopen-cli project info --json`
-- 模组里的授权码 —— `tuyaopen-cli firmware auth-status --port <口> --json`
-  读**设备上实际有什么**；`tuyaopen-cli firmware authorize` 写一对进去。
-  **不要用 `license list` 判断设备状态** —— 它列的是这台电脑上存着的码，
-  和模组里有没有是两回事（而且 `--full` 会把 AuthKey 明文打出来）
-
-**烧录整片固件不等于授权码还在。** 如果 App 提示未授权，先查这一条，别去查配网。
-
-### ⚠ 参数缺失时**不要自己拼 URL**
-
-取不到参数时信封**不给链接**，只在 `webSteps.blocked` 里说缺哪个前置。这时正确的动作是
-**把缺的前置补上再重跑**，不是自己造一个 URL。
-
-绑定页的 `id=` 是**产品 PID**，不是小程序 appid —— 名字叫 `projectId` 的那个字段装的是
-PID。第八轮实测：agent 在 `bindProductUrl` 为空时自己拼了一条，把 appid 填进了 `id=`，
-那会打开一个**真实存在但完全无关**的产品页，用户点进去看不出哪里不对。
-
-| # | 步骤 | 命令行能不能做 | 打开哪个 URL |
-|---|---|---|---|
-| 1 | **拿到 appid**（选已有 or 新建） | **能，两条路都能。** 先看账号里已有的：`tuyaopen-cli devplat exec --yes -- miniapp list --format json` → 拿 `miniProgramId` / `miniProgramName`，**把这份清单摆给用户挑**（这条命令的原始输出含每个小程序的私钥，wrapper 已经替你打码 —— 见 skill `tuyaopen-miniapp`）。要新建就 `panel create-miniapp`。两条路的收尾一样：`tuyaopen-cli miniapp meta set-appid <appid>` | 只在两条命令都不通时才开 `https://platform.tuya.com/miniapp/` —— 唯一不带参数的一步，因为参数要指的那个东西还不存在 |
-| 2 | **提审** | **不能。** 手写面板在这个 CLI 里没有提审入口，原因见上文《提审与绑定为什么只能人做》 | `https://platform.tuya.com/miniapp/version?miniProgramId=<appid>` |
-| 3 | **发布 / 上线** | **能** —— `panel miniapp-release`，前置是审核已通过；全量 100%，没有灰度和回滚参数 | 想在网页上做也行：同第 2 步的版本管理页 |
-| 4 | **把面板小程序绑定到产品** | **不能。** `panel bind` 要的 `--ui-id` 手写面板拿不到，原因见上文同一节 | `https://platform.tuya.com/pmg/step?id=<projectId>&tab=operation#PRIVATE` |
-
-> **别一上来就把用户推去建新的。** 绝大多数测试账号里已经有小程序了，
-> `miniapp list` 一条命令就能拿到。正确的顺序是：**先列，摆给用户挑，
-> 挑不到再建**。
->
-> **忘了设也不会让你瞎猜**：`miniapp upload` 在 appid 缺失（或不属于本账号）时
-> 返回 `config` / `no_appid`，信封的 `data.candidates` 里**直接带着这个账号的
-> 候选清单**（`appId` + `name`，不含私钥），`hint` 同时给出「挑一个」和
-> 「去平台建一个」两条路。
->
-> 注意 `data.candidates` 的两种空：`null` 是**没查到**（没登录 / 断网），
-> `[]` 才是**查到了、账号里确实没有**。`candidatesKnown` 是同一件事的布尔形式。
-> 不要把前者读成后者 —— 那会让你去建一个其实早就存在的小程序。
-
-### 两个参数分别是什么、从哪读
-
-两个都从 `source/miniapp/project.tuya.json` 读（读不到再退到
-`<project>/project.tuya.json`——IDE 也是按这两个候选顺序试的），并且都要
-URL 编码（IDE 用的是 `encodeURIComponent`）：
-
-| 占位符 | JSON 字段 | 实际装的是什么 | 为空说明什么 |
-|---|---|---|---|
-| `<appid>` | `appid` | **小程序 id**，就是 `tuyaopen-cli miniapp meta set-appid` 写进去的值 | 平台上还没创建这个小程序 → 先做第 **1** 步。此时没有任何东西可提审、可发布 |
-| `<projectId>` | `projectId` | ⚠ **云端产品 PID** —— 尽管字段名叫 projectId，它**不是**小程序 id | 这个项目还没绑产品（或被解绑了）→ 先绑产品；没有 PID 就没有产品页可开 |
-
-> **⚠ `projectId` 装的是产品 PID。** 看字段名想当然把它当小程序 id，是这里
-> 最容易犯的错，而且拼出来的 URL 会静悄悄开到另一个页面。已核对
-> `src/miniapp/bindingManager.ts` —— `readProjectId` / `writeProjectId` 的注释
-> 原文就是 *"Read/Write projectId (PID)"*；所有调用方传的都是产品 pid：
-> `src/host/agentFlow.ts:257`（`writeProjectId(<dir>, pid)`）、
-> `src/host/product/index.ts:173`（`message.pid`），`:208` 传 `''` 表示解绑。
-> IDE 自己给这个字段为空时的提示文案写的是「产品 ID 为空……请先绑定产品」。
-
-**绑定 URL 的 `&tab=operation#PRIVATE` 是有用的，要原样照抄。** 只给 `id=`
-会开到产品页默认的那个 tab；`tab=operation` 这个 query 加上 `#PRIVATE` 这个
-hash 才是选中"小程序绑定"所在的那一栏。少任何一半，用户会到对的产品、错的页面。
-
-参数取不到时就照 IDE 的做法办：**不要开链接，直接说清缺哪个前置步骤**
-（IDE 会弹 `miniapp.v3.step5.appidEmpty` /
-`miniapp.v3.step5.projectIdEmpty` 并且什么都不打开）。不要拿占位符、
-猜的值或者基础域名去凑。
-
-### 上传 / 提审 / 发布 / 绑定是四件不同的事
-
-四件事按顺序发生，其中**两件有命令行入口，两件没有**：
-
-1. **上传（upload）** —— `tuyaopen-cli miniapp upload`（或 IDE MiniApp 页面的
-   「上传」按钮）在平台上登记一个**版本**。**有 CLI 命令。**
-   包只是给你和团队内测用，终端用户看不到。
-2. **提审** —— 把那个版本送进审核。**没有 CLI 命令，人去网页做**（第 2 步的 URL）。
-3. **发布（上线）** —— 审核通过后把版本放出去。**有 CLI 命令**：先
-   `panel miniapp-version-status` 确认通过，再 `panel miniapp-release`。
-4. **绑定** —— 第 4 步，把**已发布**的小程序挂到产品上，面板才真的能到这款
-   产品的设备上。**没有 CLI 命令，人去网页做。**
-
-**顺序是死的：不能先绑定再发布。** 第 4 件绑的是一个**已经发布**的小程序，
-第 3 件没做完就没有东西可挂。IDE 给出的正是这个顺序——发布是 STEP 1、绑定是
-STEP 2（见 `media/webview/help/miniapp-step3.*.md`）。所以：`upload` 绿了
-**不等于**已提审，提审了**不等于**已发布，已发布**也不等于**已经能到设备上。
-照实说四件里做完了哪几件，别让"上传成功"顶替"已上线"。
-
-> **别把两种"绑定"搞混。** 本 skill 其他地方（第 2.5 步、
-> [references/platform-cache.md](references/platform-cache.md)）说的"绑定 /
-> 绑产品"是**把产品 PID 绑到项目上**，为的是能同步 DP schema，属于开发前置；
-> 这里第 4 步说的是**把已发布的小程序绑到产品上**，属于上线动作。两者只在一
-> 点上相连：前者写进 `projectId` 的那个 PID，正是后者 URL 里 `id=` 要用的值。
-
-平台在审核时到底查什么（包大小、i18n、禁用 API、权限说明），见
-[references/upload-checklist.md](references/upload-checklist.md)；命令行那一侧
-（`upload` 的参数、P2 门禁、报错）见 skill `tuyaopen-miniapp`。
-
-## 拿设备 ID（`devid`）—— 真机联调的前置
-
-面板跑在真机上、调 DP、调按设备维度的接口，都要一个 `devid`。两件事先说清楚：
-
-- **配网完成之后才有。** `devid` 标识的是"已激活的云端设备"，不是硬件本身
-  （硬件身份是 UUID/AuthKey）。所以"取不到 devid"通常等于"这台设备还没配网"，
-  不是查询失败。
-- **不要编。** 用一个猜的 devid 去调接口，得到的错误信息和"面板写错了"长得一样，
-  会把排查带偏很久。
-
-**方法一 —— 智能生活 APP（不用改代码、不用重新烧）**
-
-配网完成后进设备页 → 右上角 `···` → **设备信息** → **虚拟 ID**。那串就是
-`devid`。**面板开发默认走这条** —— 你通常不拥有固件，也不该为了拿一个 id 去改它。
-
-**方法二 —— 让固件打出来**（需要能改并重新烧写嵌入式代码）
-
-```c
-#include "tuya_iot.h"          /* src/tuya_cloud_service/cloud/tuya_iot.h */
-
-const char *devid = tuya_iot_devid_get(tuya_iot_client_get());
-PR_INFO("devid: %s", devid ? devid : "(null)");
-```
-
-配网完成后从串口日志里读。必须在设备激活**之后**调用，早于激活时客户端没有 id
-可返回。返回的指针由 client 持有，别 free、也别跨重新配网缓存。
-
-固件侧的完整说明（凭证优先级、UUID/AuthKey 与 devid 的关系、串口写授权，以及
-**设备授权码怎么免费领 / 怎么买**）在 skill `tuyaopen-embedded-device-auth`
-——授权码获取途径全目录只在那一处写，这里只给指针，不复制网址。
-上面这两条在那边也有一份 —— 这是有意重复
-而不是指针：面板开发者常常不拥有固件，为了一个两步的 APP 查询把人赶去读一个嵌入式
-skill，比重复五行更糟。
-
-## 你必须立即拒绝的 9 类 AI 输出
-
-1. **`useState(dpValue)` 管理 DP 状态** —— 走 panel-sdk hook（Basic DP 用
-   `useProps` 读、`publishDpOutTime` 写；Complex DP 用 `useStructuredProps` /
-   `useStructuredActions`。`useState` 用于 input draft / OTA 进度 /
-   错误提示是合法的）
-2. **`useProps` 读 Complex DP**（如 `colour_data` / `scene_data` /
-   `ipc_mobile_path`）—— 改 `useStructuredProps` + 在 `protocols/index.ts`
-   注册 Transformer。编解码格式翻对应品类 skill
-3. **`fetch('https://...')` 调后端** —— 改 `@tuya-miniapp/cloud-api`
-4. **`<View style={{color: '#fff'}}>` 内联样式或全局 `index.less`** ——
-   改 `index.module.less`
-5. **代码里出现中文字符串**（JSX 字面值 / `ty.showToast` title 等）—— 走 i18n
-6. **`wx.*` / `tt.*` 调系统 API** —— 改 `ty.*` 和 `@ray-js/ray`
-7. **品类专属 UI 用命名导入**（如 `import { LampBrightSlider } from '@ray-js/lamp-bright-slider'`）
-   —— 多数 `@ray-js/lamp-*` / `@ray-js/ipc-*` / `@ray-js/robot-*` 是
-   default export，命名导入会构建失败。**具体以品类 skill 的 reference 为准**
-8. **声称「可以上线了」但没跑过 `validate.mjs`** —— 强制跑一次
-9. **凭记忆回答 API 参数 / 报错原因 / 组件 props** —— 先跑 `scripts/` 下的
-   `fetch_doc.py` / `search_help.py` 查实际文档，见 [references/info-lookup.md](references/info-lookup.md)
-
-## References（按需加载）
 
 | 文件 | 何时读 |
 |---|---|

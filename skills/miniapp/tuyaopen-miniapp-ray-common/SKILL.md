@@ -1,13 +1,11 @@
 ---
 name: tuyaopen-miniapp-ray-common
-description: 面向 Ray 小程序开发提供以索引为先的文档导航与实现约束，在用户进行页面或 UI 搭建、组件封装与改造、Ray API 与设备能力集成、生命周期与路由、图片转代码、多语言与样式、或排障与升级时使用；实现前须依据 references/ray/INDEX.md
-  与路由文档定位能力，禁止虚构 API 与生命周期钩子。
+description: 面向 Ray 小程序开发提供以索引为先的文档导航与实现约束，在用户进行页面或 UI 搭建、组件封装与改造、Ray API 与设备能力集成、生命周期与路由、图片转代码、多语言与样式、或排障与升级时使用；实现前须依据
+  references/ray/INDEX.md 与路由文档定位能力，禁止虚构 API 与生命周期钩子。
 license: Apache-2.0
-compatibility:
-- Ray framework (@ray-js/ray) project
-- Node.js >= 18
+compatibility: Ray framework (@ray-js/ray) project; Node.js >= 18
 metadata:
-  version: 1.0.3
+  version: 1.0.4
   owner: miniapp-team
   deprecated: false
   min-cli-version: 0.1.0-beta.17
@@ -16,7 +14,7 @@ metadata:
 
 ## No `tuyaopen-cli` CLI coverage
 
-`tuyaopen-cli` CLI 有 `miniapp` 命令组，但只覆盖构建 / 安装运行时 / 元数据 / DP schema 同步 / 预览 / 模板 / 上传等命令行操作（详见 skill `tuyaopen-miniapp`）——具体的页面、组件、DP 交互编码不在其列。本技能的开发知识完全来自 `references/` 与项目内文档，不经 `tuyaopen-cli` CLI。
+`tuyaopen-cli` CLI 有 `miniapp` 命令组，但只覆盖构建 / 安装运行时 / 元数据 / DP schema 同步 / 预览 / 模板 / 上传等命令行操作（详见 the `tuyaopen-start` routing table）——具体的页面、组件、DP 交互编码不在其列。本技能的开发知识完全来自 `references/` 与项目内文档，不经 `tuyaopen-cli` CLI。
 
 
 ## 概述 {#description}
@@ -36,7 +34,7 @@ metadata:
 **选区**：多区并存时只选一个**主区**（按最终产物判断，不按关键词数量）；其余为次区，主区完成后再按需补读。示例：设置页带开关与输入框 → A；表单抽成组件 → B；P2P 下载 → C；`onLoad` / 路由参数 → D；按图还原 → E；全文案 i18n → F；升级后不兼容 → G。
 
 ## 搭配使用 {#cusage}
-- **tuyaopen-miniapp-smart-ui**：Smart UI 组件库 skill，配合使用可快速搭建符合设计规范的页面和组件，提升开发效率和界面一致性。
+- Smart UI 组件库相关需求：先查 `tuyaopen-start` 路由表，再按需读取对应技能。
 
 
 ## 工作流程 {#workflow}

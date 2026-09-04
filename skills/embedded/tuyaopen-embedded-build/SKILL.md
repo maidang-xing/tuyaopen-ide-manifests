@@ -1,18 +1,17 @@
 ---
 name: tuyaopen-embedded-build
-description: Build and compile TuyaOpen projects via the `tuyaopen-cli firmware build/clean` CLI (IDE-scaffolded projects)
-  or `tos.py build`/`tos.py clean` (raw SDK checkouts), select build configurations, edit Kconfig options, and run Linux ELF
-  binaries. Covers the `tuyaopen-cli config` vs `tos.py config` naming trap. Use when the user mentions compiling, building,
-  tos.py build, tuyaopen-cli firmware build, config choice, menuconfig, Kconfig, build error, or running a project. 项目编译、构建、tuyaopen-cli
-  firmware build/clean、编译配置、清理编译、编译错误、 menuconfig、Kconfig，以及 tuyaopen-cli config 与 tos.py config 的同名陷阱。
+description: Build and compile TuyaOpen projects via the `tuyaopen-cli firmware build/clean` CLI (IDE-scaffolded
+  projects) or `tos.py build`/`tos.py clean` (raw SDK checkouts), select build configurations, edit Kconfig options,
+  and run Linux ELF binaries. Covers the `tuyaopen-cli config` vs `tos.py config` naming trap. Use when the user
+  mentions compiling, building, tos.py build, tuyaopen-cli firmware build, config choice, menuconfig, Kconfig, build
+  error, or running a project. 项目编译、构建、tuyaopen-cli firmware build/clean、编译配置、清理编译、编译错误、 menuconfig、Kconfig，以及 tuyaopen-cli
+  config 与 tos.py config 的同名陷阱。
 license: Apache-2.0
-compatibility:
-- tuyaopen CLI, either form — see skill `tuyaopen-start` § 1 (for `tuyaopen-cli firmware build/clean`)
-- TuyaOpen environment activated (export.sh / export.ps1 / export.bat) — only needed for the `tos.py`-direct path; `tuyaopen-cli
-  firmware build/clean` self-activates
-- cmake >= 3.28, ninja >= 1.6
+compatibility: tuyaopen CLI, either form — see skill `tuyaopen-start` § 1 (for `tuyaopen-cli firmware build/clean`);
+  TuyaOpen environment activated (export.sh / export.ps1 / export.bat) — only needed for the `tos.py`-direct path;
+  `tuyaopen-cli firmware build/clean` self-activates; cmake >= 3.28, ninja >= 1.6
 metadata:
-  version: 1.1.3
+  version: 1.1.4
   owner: embedded-team
   deprecated: false
   min-cli-version: 0.1.0-beta.17
@@ -84,7 +83,7 @@ skill `tuyaopen-start` § 7.
 > **SDK root:** All `tos.py`-direct paths and commands below are relative to
 > the TuyaOpen SDK root (`$OPEN_SDK_ROOT` on Linux/macOS/PowerShell,
 > `%OPEN_SDK_ROOT%` on Windows CMD). Activate the environment first — see
-> skill `tuyaopen-embedded-env-setup`.
+> the `tuyaopen-start` routing table.
 
 ## Project Locations
 
@@ -151,7 +150,7 @@ tos.py config list -p LVGL                # find the right symbol name
 tos.py build                              # no clean needed
 ```
 
-It applies changes through kconfiglib (so `choice` exclusivity and derived symbols are handled), writes both `using.config` and `app_default.config`, and invalidates the generated build artifacts — **no `tos.py clean` needed** for an ordinary option change. A failed assignment aborts the whole batch and writes nothing. See skill `tuyaopen-embedded-project`, `references/CONFIG_CLI.md`.
+It applies changes through kconfiglib (so `choice` exclusivity and derived symbols are handled), writes both `using.config` and `app_default.config`, and invalidates the generated build artifacts — **no `tos.py clean` needed** for an ordinary option change. A failed assignment aborts the whole batch and writes nothing. See the `tuyaopen-start` routing table, `references/CONFIG_CLI.md`.
 
 **Fallback — hand-edit `app_default.config`** (any SDK). The file uses **Kconfig defconfig format** — only specify values that **differ from defaults**:
 

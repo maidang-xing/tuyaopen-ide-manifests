@@ -1,21 +1,22 @@
 ---
 name: tuyaopen-miniapp
-description: 'Operate the panel miniapp''s build/runtime/upload lifecycle through the tuyaopen CLI''s `miniapp` command group:
-  build, install the shared runtime, set/read metadata (appid), sync the DP schema from the bound product, preview (dev server
-  / screenshot), scaffold from a template, and upload a version to the Tuya platform — plus the platform-side `panel` commands
-  reached through `tuyaopen-cli devplat exec` (create the miniapp, next version number, review status, release). This is the
-  command-line surface only — panel architecture, DP hooks, and category UI conventions are a different skill. Use when the
-  user wants to run `tuyaopen-cli miniapp ...`, build/upload the miniapp, create it from a template, sync its DP schema, or
-  publish a version. MiniApp 命令行操作：构建、安装运行时、设置/读取元数据（appid）、从已绑定产品 同步 DP schema、预览（开发服务器/截图）、从模板创建、上传版本到涂鸦平台， 以及经 `devplat
-  exec` 转发的平台侧 `panel` 命令（建小程序、算版本号、查审核状态、发布）。 仅覆盖命令行操作本身，不涉及面板架构或品类 UI 编码规范。'
+description: 'Operate the panel miniapp''s build/runtime/upload lifecycle through the tuyaopen CLI''s `miniapp`
+  command group: build, install the shared runtime, set/read metadata (appid), sync the DP schema from the bound
+  product, preview (dev server / screenshot), scaffold from a template, and upload a version to the Tuya platform
+  — plus the platform-side `panel` and `miniapp` commands reached through `tuyaopen-cli devplat exec` (create the
+  miniapp, next version number, set UI info, submit for review, review status, release, query private ui-list, and
+  bind). This is the command-line surface only — panel architecture, DP hooks, and category UI conventions are a
+  different skill. Use when the user wants to run `tuyaopen-cli miniapp ...`, build/upload the miniapp, create it
+  from a template, sync its DP schema, or publish/bind a version. MiniApp
+
+  命令行操作：构建、安装运行时、设置/读取元数据（appid）、从已绑定产品 同步 DP schema、预览（开发服务器/截图）、从模板创建、上传版本到涂鸦平台， 以及经 `devplat exec` 转发的平台侧 `panel`
+  与 `miniapp` 命令（建小程序、算版本号、设置提审属性、提审、查审核状态、发布、查私有面板列表与绑定产品）。 仅覆盖命令行操作...'
 license: Apache-2.0
-compatibility:
-- tuyaopen CLI, either form — see skill `tuyaopen-start` § 1
-- install/upload/preview/template create carry their own vendor/miniapp-runtime since 0.1.0-beta.14; --extension-path (or
-  TUYAOPEN_EXTENSION_PATH) only overrides it
-- A TuyaOpen project with a source/miniapp directory
+compatibility: tuyaopen CLI, either form — see skill `tuyaopen-start` § 1; install/upload/preview/template create
+  carry their own vendor/miniapp-runtime since 0.1.0-beta.14; --extension-path (or TUYAOPEN_EXTENSION_PATH) only
+  overrides it; A TuyaOpen project with a source/miniapp directory
 metadata:
-  version: 2.5.0
+  version: 2.5.1
   owner: miniapp-team
   deprecated: false
   min-cli-version: 0.1.0-beta.17
@@ -71,7 +72,7 @@ find ~/.vscode/extensions ~/.cursor/extensions ~/.trae/extensions \
 —— 内测第五轮里借用的那个目录**在会话中途消失了**（疑似扩展自动更新/清理）。
 
 一个都找不到时，`preview` 这一步的降级方案见
-skill `tuyaopen-workflow-miniapp-dev` 的 ⑧（真机扫码看，或去真 IDE 里跑）。
+the `tuyaopen-start` routing table 的 ⑧（真机扫码看，或去真 IDE 里跑）。
 
 ## Shortcuts — `tuyaopen-cli miniapp`
 
@@ -85,7 +86,8 @@ skill `tuyaopen-workflow-miniapp-dev` 的 ⑧（真机扫码看，或去真 IDE 
 | Browse / apply the template gallery | `tuyaopen-cli miniapp template list` · `template create` (P2) |
 | Build, sign, and upload to the Tuya platform | `tuyaopen-cli miniapp upload` (P2) |
 | List the account's existing miniapps, or create one on the platform | `tuyaopen-cli devplat exec` (P2) — forwards `miniapp list` / `panel create-miniapp`, see § *平台侧* |
-| Next version number · review status · release a version | `tuyaopen-cli devplat exec` (P2) — forwards `panel miniapp-next-version` / `miniapp-version-status` / `miniapp-release` |
+| Next version · UI info set · submit review · review status · release | `tuyaopen-cli devplat exec` (P2) — forwards `panel miniapp-next-version` / `miniapp ui-info-set` / `miniapp submit-review` / `panel miniapp-version-status` / `panel miniapp-release` |
+| List private panels · bind panel to product PID | `tuyaopen-cli devplat exec` (P2) — forwards `panel ui-list --code PRIVATE` / `panel bind` |
 
 Flags aren't listed here — run `tuyaopen-cli schema get --group miniapp --command
 <c>` for the current set. Resolve `tuyaopen-cli` first per skill `tuyaopen-start`
@@ -108,7 +110,7 @@ tuyaopen-cli miniapp upload --version 1.0.0 --description "..." --yes
 
 Seven commands, and running them in the wrong order is the most common way a
 panel build goes wrong — but sequence is a workflow question, not a command
-question. **Skill `tuyaopen-workflow-miniapp-dev` owns the whole panel
+question. **Skill the matching routed skill owns the whole panel
 lifecycle**: creating the miniapp and getting an appid, when to hand the user a
 render URL, when to upload, when to release, and the two steps that only a human
 can do (submit for review, bind to the product) with the URLs to construct.
@@ -124,7 +126,7 @@ arrive in — which is exactly why they stay here and the sequence does not.
 `tuyaopen-cli miniapp meta set-appid <appid>` **records** an appid; it never mints
 one, and no command in this group takes a `projectId`. Both values exist to
 build the platform URLs for the web-only steps, which is a workflow concern —
-skill `tuyaopen-workflow-miniapp-dev` § *两个参数分别是什么、从哪读* is the
+the `tuyaopen-start` routing table § *两个参数分别是什么、从哪读* is the
 single authority for where they are read from, the `encodeURIComponent`
 requirement, and the trap that **`projectId` holds the product PID, not a
 MiniApp id**.
@@ -153,23 +155,26 @@ pipeline. `--dry-run` first is worth it here more than most P2 commands,
 given how long the real run takes.
 
 A successful `upload` registers a **version**, it does not release it and it
-does not attach it to a product. Of the three things that follow it, **one has
-a command and two do not**: releasing an approved version is
-`panel miniapp-release` (§ *平台侧*), while **submitting for review** and
-**binding the MiniApp to the product** have no reachable command for a
-hand-written panel — the preconditions are spelled out in § *这两条为什么没有可用入口*.
+does not attach it to a product. The complete release and bind pipeline is fully
+supported through `tuyaopen-cli devplat exec` (§ *平台侧*):
+1. `miniapp ui-info-set` (sets the 4 required review-facing UI properties)
+2. `miniapp submit-review --miniapp-id <appid> --version-id <versionId>` (submits for platform review)
+3. `panel miniapp-version-status` (polls review status until 2)
+4. `panel miniapp-release` (releases the approved version)
+5. `panel ui-list --product-id <PID> --code PRIVATE` + `panel bind --ui-id <uiId> --product-id <PID>` (binds panel to product)
+The structured URLs in `data.webSteps` provide direct web fallbacks if any step encounters missing permissions or legacy CLI environments.
 Report `upload` as "uploaded for internal testing", never as "published" and
 never as "live on the device".
 
 `--version` wants the value `panel miniapp-next-version` returns as
 `nextVersion`; that command is read-only and takes only the appid.
 
-## 平台侧：经 `devplat exec` 转发的 `panel` 命令
+## 平台侧：经 `devplat exec` 转发的 `panel` 与 `miniapp` 命令
 
-`tuyaopen-cli` 自己的 `miniapp` 组只有那七条。建小程序、算版本号、查审核状态、
-发布上线属于**平台**，在 vendored `tuya-devplat-cli` 里，经 `devplat exec` 转发。
+`tuyaopen-cli` 自己的 `miniapp` 组只有那七条。建小程序、算版本号、属性设置、提审、查审核状态、
+发布上线与绑定产品属于**平台**，在 vendored `tuya-devplat-cli` 里，经 `devplat exec` 转发。
 **顺序不在本节** —— 哪一步先跑、哪一步交给用户，见 skill
-`tuyaopen-workflow-miniapp-dev`。这里只讲每条命令要什么、给什么、怎么失败。
+the matching routed skill。这里只讲每条命令要什么、给什么、怎么失败。
 
 ### wrapper 形状 —— 两个开关都不能省
 
@@ -194,8 +199,12 @@ tuyaopen-cli devplat exec --yes -- <devplat 参数…> --format json
 | `miniapp list` | 无 | 账号里已有的小程序（`miniProgramId` / `miniProgramName` …） |
 | `panel create-miniapp --product-id <PID>` | 产品 PID | `{ miniProgramId, miniappName? }` —— **`miniProgramId` 就是 appid**，拿去 `tuyaopen-cli miniapp meta set-appid` |
 | `panel miniapp-next-version --miniapp-id <appid>` | appid | `{ nextVersion, currentMax }`。只读。跨 dev/review/online 取最大再 +1；`currentMax` 为空时 `nextVersion` 是 `1.0.0`。`nextVersion` 正是 `miniapp upload --version` 要的那个值 |
+| `miniapp ui-info-set --miniapp-id <appid> --type <type> --value <val>` | appid + 类型 + 值 | `{ miniProgramId, type, value }`。`type` 支持 `iotUiName`、`iotUiEnName`、`iotUiPreviewPicture`、`iotUiEnPreviewPicture` |
+| `miniapp submit-review --miniapp-id <appid> --version-id <vid>` | appid + 版本 ID | `{ miniProgramId, versionId, submitted }`。执行 audit check 预检并提交审核。`versionId` 来自 `upload` 返回 |
 | `panel miniapp-version-status --miniapp-id <appid> --version-code <x.y.z>` | appid + 版本号 | `{ versionId, versionCode, reviewStatus, grayState, versionType }`。只读 |
 | `panel miniapp-release --miniapp-id <appid> --version-code <x.y.z>` | appid + 版本号 | `{ published, versionId, versionCode, message? }`。**前置：这个版本的 `reviewStatus` 必须是 2**。全量 100%，不是灰度 |
+| `panel ui-list --product-id <PID> --code PRIVATE` | PID + `PRIVATE` | 属于该 PID 的私有面板列表（提取其中的 `uiId`，**注意 `--ui-id` 是 Panel UI ID，绝非 appid**） |
+| `panel bind --ui-id <uiId> --product-id <PID>` | uiId + PID | `{ bindSuccess, ... }`。将已发布的面板绑定到目标产品 |
 
 ### 两张码表 —— 别按名字猜
 
@@ -222,7 +231,7 @@ tuyaopen-cli devplat exec --yes -- <devplat 参数…> --format json
 | `VERSION_NOT_FOUND` | 这个 appid 下三档里都没有这个 `--version-code` | 版本号写错了，或 `upload` 还没成功。用 `panel miniapp-next-version` 对一下号 |
 | `REVIEW_STATUS_NOT_APPROVED` | `miniapp-release` 的前置没满足 —— `reviewStatus` 不是 2。`details` 里带着当前值 | 审核还没过就等，被打回就修完重新走一遍。**不要重试**，重试不会改变审核状态 |
 | `ok:true` 但 `published:false`，`message` 说 `already published` | 这个版本已经在线上了 | 这是成功，不是失败。别当成"没发出去"再发一次 |
-| `API_NOT_AUTHORIZED` | 这条命令不在你账号的授权 API 集里。**注意 `panel --help` 会按授权集过滤，所以"没列出来"不等于"不存在"** | 去要这个 API 的权限。**不要重试**，也不要读成"这个命令不存在"（skill `tuyaopen-cloud` 的 Trap 1） |
+| `API_NOT_AUTHORIZED` | 这条命令不在你账号的授权 API 集里。**注意 `panel --help` 会按授权集过滤，所以"没列出来"不等于"不存在"** | 去要这个 API 的权限。**不要重试**，也不要读成"这个命令不存在"（the `tuyaopen-start` routing table 的 Trap 1） |
 | `devplat-non-json` | 忘了 `--format json` | 补上，它写在 `--` 之后 |
 
 ### 15 秒天花板 —— 以及为什么不要用 `-wait` 那几条
@@ -252,25 +261,20 @@ tuyaopen-cli devplat exec --yes --timeout 60 -- panel miniapp-version-status --m
 上一轮内测就是因为没有这层打码，把账号里每一个小程序的私钥原样贴进了对话记录。
 需要看清单就配 `--fields`，只要 `miniProgramId` / `miniProgramName`。
 
-### 这两条为什么没有可用入口
+### 提审与绑定的命令闭环与参数获取
 
-`panel` 组里另外还有两条看起来正好对得上的命令。它们对**手写**面板都用不了，
-这是读源码得到的结论，不是"还没试"：
+在最新版本的 `tuya-devplat-cli`（提交 `3625a165` 起）中，提审与绑定已全面支持通过 CLI 命令闭环：
 
-- **`panel miniapp-submit-version-review`（提审）** 要 `--conversation-id`，
-  而它拼出去的请求体里 **conversationId 是唯一标识"要发布哪份代码"的字段**：
-  `miniappId` 只用来查版本号，根本不进请求体。服务端压缩上传的是**那次 AI 会话
-  的工作区**，`miniapp upload` 产出的东西完全不参与。conversationId 只从
-  `panel ai-create`（让 AI 写面板那条路）来。此外还有一道 `PANEL_IMAGE_REQUIRED`
-  的 fail-fast（封面图只从产物 `extendInfo.panelImage` 读，由人在网页预览页生成）
-  和一个 IDE 从不设置的沙箱 `--project-id`。miniprogram 平台那一侧**没有提审接口**。
-- **`panel bind --ui-id <uiId> --product-id <PID>`（绑产品）** 命令本身是好的，
-  但 `--ui-id` **不是 appid** —— 它是一个 Panel UI ID，发布之后才存在，由
-  AI 面板 / 沙箱产物那条路铸出来（`panel artifact-detail --project-id <sandboxProjectId>`
-  → `artifactPanel.uiId`）。手写面板在这个 CLI 里没有任何东西产出这个值。
-  `panel ui-list` 会不会列出它、列在哪个字段下，**从源码看不出来，没有验证过**。
+- **提审命令（`miniapp ui-info-set` + `miniapp submit-review`）**：
+  1. `miniapp ui-info-set --miniapp-id <appid> --type <type> --value <val>`：填齐提审前置的 4 项属性（`iotUiName`、`iotUiEnName`、`iotUiPreviewPicture`、`iotUiEnPreviewPicture`）。
+  2. `miniapp submit-review --miniapp-id <appid> --version-id <versionId>`：底层先调 `version.audit.check:1.0` 预检，通过后调 `version.review:3.0` 提交审核。`versionId` 来自 `tuyaopen-cli miniapp upload` 的返回值或 `panel miniapp-version-status`。
+  *（注：不要使用历史废弃的 `panel miniapp-submit-version-review`，那条命令仅适用于 AI 沙箱会话）*。
+- **绑定命令（`panel ui-list` + `panel bind`）**：
+  1. `panel ui-list --product-id <PID> --code PRIVATE`：查询该产品的私有面板列表，从中匹配 `miniappId` 提取出分配的 `uiId`（**注意：`--ui-id` 是 Panel UI ID，绝非 appid**）。
+  2. `panel bind --ui-id <uiId> --product-id <PID>`：将该面板绑定至目标产品 PID。
+- **网页兜底**：若运行环境的 devplat-cli 版本较低未包含新命令，或图片/uiId 无法在命令行解析，可通过 `data.webSteps` 里的 `versionPageUrl` 与 `bindProductUrl` 打开网页操作。
 
-这两步的网址、以及它们在整条链上的位置，在 skill `tuyaopen-workflow-miniapp-dev`。
+这两步的网址、以及它们在整条链上的位置，在 the `tuyaopen-start` routing table。
 
 ## Troubleshooting
 
@@ -285,9 +289,10 @@ tuyaopen-cli devplat exec --yes --timeout 60 -- panel miniapp-version-status --m
 | `sync-schema` fails `config:no_product_cache` | Product bound, but no local DP snapshot cached yet | Refresh/bind the product from the TuyaOpen IDE, then retry |
 | `template create` rejected as `confirmation:needs_yes` | P2 gate — missing `--yes` | Add it, or use `--dry-run` to preview first |
 | `template create` fails `config:manifest_item_missing` (unknown template id) | Wrong or stale `--id` | Run `tuyaopen-cli miniapp template list` for current ids |
-| `upload` succeeded but end users still don't see the miniapp | Expected — `upload` registers a version for internal testing only | It still has to be submitted for review (human, `https://platform.tuya.com/miniapp/version?miniProgramId=<appid>`), then released (`panel miniapp-release`), then bound to the product (human, `https://platform.tuya.com/pmg/step?id=<projectId>&tab=operation#PRIVATE`) |
+| `upload` succeeded but end users still don't see the miniapp | Expected — `upload` registers a version for internal testing only | Submit for review (CLI: `miniapp submit-review`, or web `versionPageUrl`), release (`panel miniapp-release`), then bind to product (CLI: `panel ui-list --code PRIVATE` + `panel bind`, or web `bindProductUrl`) |
 | `panel miniapp-release` returns `REVIEW_STATUS_NOT_APPROVED` | The version's `reviewStatus` is not 2 — `details.reviewStatus` carries the current value | 1 = still under review (wait and re-query), 3 = rejected (fix, upload a new version, submit again). Retrying `miniapp-release` cannot change it |
 | `panel miniapp-version-status` returns `VERSION_NOT_FOUND` | No version with that `--version-code` exists under this appid, in any of the three types | Check the number against `panel miniapp-next-version`, and that `miniapp upload` actually succeeded |
 | A `panel *-wait` / `ai-wait` command dies at 15 s as `tooling:timeout` | `devplat exec` kills the child after 15 s by default; those commands poll for 300–540 s | Don't use the `-wait` variants through this passthrough — poll `panel miniapp-version-status` yourself. `--timeout <seconds>` exists for a single slow call, not for a five-minute poll |
-| Miniapp is published, review passed, but the panel still doesn't appear on the device | Publishing ≠ binding — the published MiniApp is not attached to the product yet | Bind it in the browser: `https://platform.tuya.com/pmg/step?id=<projectId>&tab=operation#PRIVATE` (`<projectId>` = the **product PID** from `project.tuya.json`, keep `&tab=operation#PRIVATE` verbatim). `panel bind` cannot do it — see § *这两条为什么没有可用入口* |
+| Miniapp is published, review passed, but the panel still doesn't appear on the device | Publishing ≠ binding — the published MiniApp is not attached to the product yet | Query uiId with `panel ui-list --product-id <pid> --code PRIVATE` and run `panel bind --ui-id <uiId> --product-id <pid>`; or bind in browser via `bindProductUrl` |
+| `upload` fails `config:no_pid_bound` — *"No appid in project.tuya.json"* | No appid recorded; often because the miniapp was never created on the platform. Note this is the **same** subtype `sync-schema` uses for a missing *product* pid — read the message, not just the code | Create the miniapp with `panel create-miniapp --product-id <PID>` (§ *平台侧*) — or at <https://platform.tuya.com/miniapp/> — then `tuyaopen-cli miniapp meta set-appid <appid>` (or use the IDE binding flow) |
 | `upload` fails `config:no_pid_bound` — *"No appid in project.tuya.json"* | No appid recorded; often because the miniapp was never created on the platform. Note this is the **same** subtype `sync-schema` uses for a missing *product* pid — read the message, not just the code | Create the miniapp with `panel create-miniapp --product-id <PID>` (§ *平台侧*) — or at <https://platform.tuya.com/miniapp/> — then `tuyaopen-cli miniapp meta set-appid <appid>` (or use the IDE binding flow) |

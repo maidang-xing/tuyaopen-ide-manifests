@@ -879,8 +879,29 @@ def check_frontmatter_parses(items: list) -> None:
                 err(f"{label}: {local_path}/SKILL.md frontmatter missing non-empty 'license'")
 
             compat = parsed.get("compatibility")
-            if not isinstance(compat, list) or not compat:
-                err(f"{label}: {local_path}/SKILL.md frontmatter 'compatibility' must be a non-empty list")
+            if applies_to_tuyaopen(item):
+                valid_compat = isinstance(compat, str) and 0 < len(compat.strip()) <= 500
+            else:
+                # TuyaOS-only payloads are intentionally unchanged in this migration.
+                # Their historical compatibility field is a non-empty list.
+                valid_compat = isinstance(compat, list) and bool(compat)
+            if not valid_compat:
+                shape = "1-500 character string" if applies_to_tuyaopen(item) else "non-empty list"
+                err(f"{label}: {local_path}/SKILL.md frontmatter 'compatibility' must be a {shape}")
+
+            desc = parsed.get("description")
+            if not (isinstance(desc, str) and 0 < len(desc) <= 1024):
+                err(f"{label}: {local_path}/SKILL.md frontmatter 'description' must be 1-1024 characters")
+
+            name = parsed.get("name")
+            if not (isinstance(name, str) and 0 < len(name) <= 64):
+                err(f"{label}: {local_path}/SKILL.md frontmatter 'name' must be 1-64 characters")
+
+            md_path = REPO_ROOT / local_path
+            if md_path.is_file():
+                body_lines = md_path.read_text(encoding="utf-8").count("\n") + 1
+                if body_lines > 500:
+                    err(f"{label}: {local_path}/SKILL.md has {body_lines} lines; keep it under 500 lines")
 
             meta = parsed.get("metadata")
             if not isinstance(meta, dict):
@@ -898,6 +919,87 @@ def check_frontmatter_parses(items: list) -> None:
             continue
         for p in _yaml_floor_errors(body):
             err(f"{label}: {local_path}/SKILL.md frontmatter {p}")
+
+
+def check_official_skill_shape(items: list) -> None:
+    """Reject nested SKILL.md payloads for the TuyaOpen-format migration."""
+    seen: set[Path] = set()
+    legacy_roots: list[Path] = []
+    for item in items:
+        local_path = item.get("source", {}).get("localPath")
+        if not is_str(local_path):
+            continue
+        payload_root = (REPO_ROOT / local_path).resolve()
+        seen.add(payload_root)
+        if not applies_to_tuyaopen(item):
+            legacy_roots.append(payload_root)
+    for md in (REPO_ROOT / "skills").rglob("SKILL.md"):
+        payload_dir = md.parent.resolve()
+        if payload_dir not in seen and not any(
+            payload_dir == legacy or legacy in payload_dir.parents
+            for legacy in legacy_roots
+        ):
+            err(f"nested SKILL.md outside a registered TuyaOpen payload: {md.relative_to(REPO_ROOT)}; move it to references/ and link it from the parent skill")
+
+
+def _skill_files(item: dict) -> list[Path]:
+    local_path = item.get("source", {}).get("localPath")
+    if not is_str(local_path):
+        return []
+    root = REPO_ROOT / local_path
+    return [root / "SKILL.md", *sorted((root / "references").rglob("*.md"))] if (root / "references").is_dir() else [root / "SKILL.md"]
+
+
+def check_local_file_references(items: list) -> None:
+    """Markdown links to files under a skill payload must resolve."""
+    link_re = re.compile(r"\[[^\]]+\]\(([^)#?][^)]*)\)")
+    for item in items:
+        for md in _skill_files(item):
+            if not md.is_file():
+                continue
+            text = md.read_text(encoding="utf-8")
+            skill_root = md
+            while skill_root != skill_root.parent and not (skill_root / "SKILL.md").is_file():
+                skill_root = skill_root.parent
+            for match in link_re.finditer(text):
+                rel = match.group(1).strip()
+                if not rel or rel.startswith(("http://", "https://", "mailto:", "/", "#", "<", "待补充")):
+                    continue
+                rel = rel.split("#", 1)[0]
+                if not rel or rel in {".", "./", "..", "../"}:
+                    continue
+                target = md.parent / rel
+                if not target.is_file() and (skill_root / rel).is_file():
+                    target = skill_root / rel
+                if not target.is_file():
+                    err(f"{md.relative_to(REPO_ROOT)}: referenced file does not exist: {rel}")
+
+
+def check_cross_skill_references(items: list) -> None:
+    """Enforce the published routing graph outside this skill's own resources."""
+    ids = {item.get("id") for item in items if is_str(item.get("id"))}
+    workflows = {sid for sid in ids if sid.startswith("tuyaopen-workflow-")}
+    for item in items:
+        src = item.get("id")
+        if not is_str(src) or not applies_to_tuyaopen(item):
+            continue
+        md = _skill_files(item)[0]
+        if md.is_file():
+            text = md.read_text(encoding="utf-8")
+            for dst in ids:
+                if dst == src:
+                    continue
+                if not re.search(r"(?<![\\w-])" + re.escape(dst) + r"(?![\\w-])", text):
+                    continue
+                allowed = (
+                    src == "tuyaopen-start"
+                    or dst == "tuyaopen-start"
+                    or src == "tuyaopen-embedded"
+                    or src == "tuyaopen-skill-maker"
+                    or src in workflows
+                )
+                if not allowed:
+                    err(f"{md.relative_to(REPO_ROOT)}: skill '{src}' names sibling skill '{dst}'; route out-of-scope work through tuyaopen-start instead")
 
 
 # The routing table's own path, relative to REPO_ROOT. `tuyaopen-start` owns the
@@ -1188,6 +1290,9 @@ def main() -> int:
     check_progressive_disclosure(items)
     check_markdown_relative_links(items)
     check_routing_covers_opt_in(items)
+    check_official_skill_shape(items)
+    check_local_file_references(items)
+    check_cross_skill_references(items)
     check_resident_descriptions_cover_triggers(items)
     check_attachments_have_exit(items)
 

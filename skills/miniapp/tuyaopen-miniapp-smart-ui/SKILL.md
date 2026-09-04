@@ -1,20 +1,18 @@
 ---
 name: tuyaopen-miniapp-smart-ui
-description: 面向 Ray 小程序 smart-ui，基于 meta-first 工作流协助生成与修改页面与组件。在用户提出 UI 搭建、组件改造、表单与反馈交互、导航展示、图片转代码或 smart-ui 排障升级时使用；仅覆盖 smart-ui，实现前须查阅
-  _meta.json 与组件文档，禁止虚构 props、事件与能力。
+description: 面向 Ray 小程序 smart-ui，基于 meta-first 工作流协助生成与修改页面与组件。在用户提出 UI 搭建、组件改造、表单与反馈交互、导航展示、图片转代码或 smart-ui 排障升级时使用；仅覆盖
+  smart-ui，实现前须查阅 _meta.json 与组件文档，禁止虚构 props、事件与能力。
 license: Apache-2.0
-compatibility:
-- Ray framework project with @ray-js/smart-ui installed
-- Node.js >= 18
+compatibility: Ray framework project with @ray-js/smart-ui installed; Node.js >= 18
 metadata:
-  version: 1.0.4
+  version: 1.0.5
   owner: miniapp-team
   deprecated: false
   min-cli-version: 0.1.0-beta.17
 ---
 ## No `tuyaopen-cli` CLI coverage
 
-`tuyaopen-cli` CLI 有 `miniapp` 命令组，但只覆盖构建 / 安装运行时 / 元数据 / DP schema 同步 / 预览 / 模板 / 上传等命令行操作（详见 skill `tuyaopen-miniapp`）——具体的页面、组件、DP 交互编码不在其列。本技能的开发知识完全来自 `references/` 与项目内文档，不经 `tuyaopen-cli` CLI。
+`tuyaopen-cli` CLI 有 `miniapp` 命令组，但只覆盖构建 / 安装运行时 / 元数据 / DP schema 同步 / 预览 / 模板 / 上传等命令行操作（详见 the `tuyaopen-start` routing table）——具体的页面、组件、DP 交互编码不在其列。本技能的开发知识完全来自 `references/` 与项目内文档，不经 `tuyaopen-cli` CLI。
 
 ## 概述 {#description}
 
@@ -30,8 +28,8 @@ metadata:
 当前**仅**处理 smart-ui，不作为通用 Ray API 或设备能力开发总入口。若用户目标超出 smart-ui，应先说明超出当前范围，再给出最小必要的外部建议。
 
 ## 搭配使用 {#usage}
-- **tuyaopen-miniapp-requirement-guide**：需求生成指南 skill，配合使用可产出符合小程序面板规范的需求文档。
-- **tuyaopen-miniapp-ray-common**：Ray 小程序开发 skill，配合使用可在更广泛的 Ray 开发场景中提供文档导航与实现约束，提升开发效率和代码质量。
+- 需求生成指南：超出 Smart UI 范围时查 `tuyaopen-start` 路由表。
+- Ray API / 生命周期等通用开发知识：超出 Smart UI 范围时查 `tuyaopen-start` 路由表。
 
 ## 品类业务剧本与功能 SDK {#categories}
 

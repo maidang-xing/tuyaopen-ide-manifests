@@ -1,27 +1,26 @@
 ---
 name: tuyaopen-embedded-project
 description: 'Read and mutate the `.tuyaopen/` project descriptor via the `tuyaopen-cli` CLI (`project info/create/set-platform/set-board/set-status/set-intent/
-  bind-product`), browse the local demo/example catalogue (`demos list/detail`), and read or write the three IDE settings
-  (`config get/set/list`: language/gitMirror/manifestsSource — NOT Kconfig). Also covers the underlying `tos.py new`/`tos.py
-  config` project & build-config tooling these CLI commands sit on top of. Use when the user mentions creating a project,
-  project metadata, binding a product, tos.py new, saving or choosing a build config, tos.py config set/get/list/diff, tos.py
-  update, or IDE settings. 项目创建与元数据、项目描述符读写、demo 目录浏览、IDE 设置（language/ gitMirror/manifestsSource，注意不是 Kconfig）、tos.py config
-  构建配置管理、 更新依赖。'
+  bind-product`), browse the local demo/example catalogue (`demos list/detail`), and read or write the three IDE
+  settings (`config get/set/list`: language/gitMirror/manifestsSource — NOT Kconfig). Also covers the underlying
+  `tos.py new`/`tos.py config` project & build-config tooling these CLI commands sit on top of. Use when the user
+  mentions creating a project, project metadata, binding a product, tos.py new, saving or choosing a build config,
+  tos.py config set/get/list/diff, tos.py update, or IDE settings. 项目创建与元数据、项目描述符读写、demo 目录浏览、IDE 设置（language/ gitMirror/manifestsSource，注意不是
+  Kconfig）、tos.py config 构建配置管理、 更新依赖。'
 license: Apache-2.0
-compatibility:
-- tuyaopen CLI, either form — see skill `tuyaopen-start` § 1
-- TuyaOpen environment activated (export.sh / export.ps1 / export.bat) for the tos.py-side commands
-- TTY terminal required for interactive tos.py commands (tos.py new, config choice/menu/save)
-- 'tos.py config set/get/list/diff: newer SDKs only — detect with `tos.py config -h`, never from a version number'
+compatibility: 'tuyaopen CLI, either form — see skill `tuyaopen-start` § 1; TuyaOpen environment activated (export.sh
+  / export.ps1 / export.bat) for the tos.py-side commands; TTY terminal required for interactive tos.py commands
+  (tos.py new, config choice/menu/save); tos.py config set/get/list/diff: newer SDKs only — detect with `tos.py
+  config -h`, never from a version number'
 metadata:
-  version: 1.3.1
+  version: 1.3.2
   owner: embedded-team
   deprecated: false
   min-cli-version: 0.1.0-beta.17
 ---
 # TuyaOpen Project, Demos & Config
 
-> **SDK root:** `tos.py`-side paths and commands in this skill are relative to the TuyaOpen SDK root (`$OPEN_SDK_ROOT` on Linux/macOS/PowerShell, `%OPEN_SDK_ROOT%` on Windows CMD). Activate the environment first — see skill `tuyaopen-embedded-env-setup`. The `tuyaopen-cli project` / `demos` / `config` CLI commands below don't need SDK-env activation — they read/write `.tuyaopen/` and IDE settings directly.
+> **SDK root:** `tos.py`-side paths and commands in this skill are relative to the TuyaOpen SDK root (`$OPEN_SDK_ROOT` on Linux/macOS/PowerShell, `%OPEN_SDK_ROOT%` on Windows CMD). Activate the environment first — see the `tuyaopen-start` routing table. The `tuyaopen-cli project` / `demos` / `config` CLI commands below don't need SDK-env activation — they read/write `.tuyaopen/` and IDE settings directly.
 
 Docs: <https://tuyaopen.ai/docs/tos-tools/tos-guide>
 
@@ -164,7 +163,7 @@ product. It shows up in link errors, so don't "correct" it.
 
 **After creation — next steps:**
 1. `cd my_app`
-2. Select a config: `tos.py config choice` (interactive), or manually create `app_default.config` (see skill `tuyaopen-embedded-build` for Kconfig format).
+2. Select a config: `tos.py config choice` (interactive), or manually create `app_default.config` (see the `tuyaopen-start` routing table for Kconfig format).
 3. Build: `tos.py build`
 
 A new project has no `app_default.config` — the build system will copy an empty template on first build, but you must configure a platform/board before a meaningful build succeeds.
@@ -180,11 +179,11 @@ Flow:
 4. Automatically registers the board in `boards/<platform>/Kconfig` so it appears in `config choice`.
 5. For ESP32, chip name defaults to `esp32s3`; for other platforms, uses the platform name.
 
-See skill `tuyaopen-embedded-add-board` for the full board adaptation guide.
+See the `tuyaopen-start` routing table for the full board adaptation guide.
 
 ## Configuration Management
 
-For detailed Kconfig editing guidance (dependency mechanisms, defconfig format, config pipeline), see skill **`tuyaopen-embedded-build`**.
+For detailed Kconfig editing guidance (dependency mechanisms, defconfig format, config pipeline), see skill **the matching routed skill**.
 
 ### Which config commands does this SDK have? — ask the SDK
 
@@ -234,7 +233,7 @@ Config lookup priority:
 tos.py config menu
 ```
 
-Opens a terminal-based Kconfig editor. **Triggers a full clean first.** Best for fine-tuning options with complex dependencies — the editor resolves `select` / `depends on` automatically. See skill `tuyaopen-embedded-build` for the Kconfig Dependency Guide.
+Opens a terminal-based Kconfig editor. **Triggers a full clean first.** Best for fine-tuning options with complex dependencies — the editor resolves `select` / `depends on` automatically. See the `tuyaopen-start` routing table for the Kconfig Dependency Guide.
 
 ### `tos.py config save`
 
@@ -276,7 +275,7 @@ tos.py config diff TUYA_T5AI_EVB               # semantic diff vs current config
 
 Full semantics, flags, and troubleshooting: `references/CONFIG_CLI.md`.
 
-*Not present — hand-edit `app_default.config`.* See skill `tuyaopen-embedded-build` for format details and Kconfig dependency handling.
+*Not present — hand-edit `app_default.config`.* See the `tuyaopen-start` routing table for format details and Kconfig dependency handling.
 
 > **After hand-editing `app_default.config`, run `tos.py clean -f` before rebuilding.** Unlike `config choice` / `config menu` / `config set` (which handle this automatically), a manual edit does **not** invalidate the build, so the stale `.build/cache/using.config` may be reused and your changes ignored. Run `tos.py clean -f` then `tos.py build`.
 >

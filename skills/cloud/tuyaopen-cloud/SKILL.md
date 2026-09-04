@@ -1,13 +1,12 @@
 ---
 name: tuyaopen-cloud
-description: 'Operate the Tuya Developer Platform via tuya-devplat-cli: create products, search products, manage DPs, and
-  more. Wi-Fi + Bluetooth dual-mode only.'
+description: 'Operate the Tuya Developer Platform via tuya-devplat-cli: create products, search products, manage
+  DPs, and more. Wi-Fi + Bluetooth dual-mode only.'
 license: Apache-2.0
-compatibility:
-- tuyaopen CLI, either form — see skill `tuyaopen-start` § 1 (for `tuyaopen-cli cloud`/`dp`/`product`)
-- Tuya IoT Platform account (platform.tuya.com) with valid credentials
+compatibility: tuyaopen CLI, either form — see skill `tuyaopen-start` § 1 (for `tuyaopen-cli cloud`/`dp`/`product`);
+  Tuya IoT Platform account (platform.tuya.com) with valid credentials
 metadata:
-  version: 1.8.1
+  version: 1.8.2
   owner: cloud-team
   deprecated: false
   min-cli-version: 0.1.0-beta.17
@@ -135,14 +134,14 @@ snapshot and a fallback cache, none of which the raw response has.
 
 **The reverse mistake is the one that actually happened.** `tuyaopen-cli` has no
 command for creating a panel miniapp, submitting it for review, publishing it,
-or binding it to a product — and skill `tuyaopen-miniapp` concluded from that
+or binding it to a product — and the `tuyaopen-start` routing table concluded from that
 that those four steps "have no CLI command at all and can only be done in a
 browser", and told the agent not to look. `tuya-devplat-cli`'s `panel` group
 carries all of them: `create-miniapp`, `miniapp-next-version`,
 `miniapp-submit-version-review`, `miniapp-task-poll`, `miniapp-version-status`,
 `miniapp-release`, `miniapp-release-wait`, `bind`, `save-standard-relation`
 (plus `product release-ui`). Corrected 2026-08-21; the full chain now lives in
-`tuyaopen-miniapp` § 0.2.
+the matching routed skill § 0.2.
 
 Generalise it: **`tuyaopen-cli schema list` is the authority for `tuyaopen-cli`, and for
 nothing else.** "Absent from `tuyaopen-cli`" is not evidence about this CLI, and —

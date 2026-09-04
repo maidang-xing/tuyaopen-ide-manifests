@@ -136,10 +136,9 @@ Tuya 平台「网络请求白名单」里登记。审核时随机抽查请求 ho
 
 ---
 
-## C. 上传前自检流程 → 上传 → 提审发布 → 绑定
+### C. 上传前自检流程 → 上传 → 提审发布 → 绑定
 
-（步骤 1–4 是上传前自检，步骤 5 是上传，步骤 6、7 是**只能在网页上做**的
-提审发布与绑定——顺序不能反，绑定要求小程序已发布。）
+（步骤 1–4 是上传前自检，步骤 5 是上传，步骤 6、7 是提审发布与绑定（优先 CLI 执行，支持网页兜底）——顺序不能反，绑定要求小程序已发布。）
 
 ### 步骤 1：跑自动化检查
 
@@ -153,28 +152,25 @@ node .agents/skills/tuyaopen-workflow-miniapp-dev/scripts/validate.mjs
 - `1` = 有警告，可以上传但建议修
 - `2` = 有错误，**不能上传**
 
-### 步骤 2：人工核对（脚本查不出来的）
-
-- [ ] 在 Tuya 平台后台「权限管理」里勾了对应权限并填了说明
-- [ ] 在「网络请求白名单」里登记了所有外部 host
-- [ ] 「面板基础信息」填了：图标、名称、品类、描述
-- [ ] 「面板兼容产品」选了至少一个 PID
-- [ ] 提交描述 / changelog 写清楚了本版本变化（审核会读）
-
-### 步骤 3：本地真机测试
-
-- [ ] 涂鸦智能 App 扫码预览（一次完整用户路径）
-- [ ] 多种网络（5G / Wi-Fi / 弱网）下点击响应不卡
-- [ ] 中英切换 → 字符串无残留中文
-- [ ] 关闭应用再打开 → 状态正确恢复
-
-### 步骤 4：构建包检查
+### 步骤 2：跑依赖检查
 
 ```bash
-ray build --target tuya       # 生产构建
-du -sh dist/                  # 源码包大小（压缩后需 ≤ 5 MB）
-du -sh cdn/                   # 当前项目 CDN 占用（账号总限额 100 MB）
-find cdn -size +500k          # 找超过 500KB 的单个资源
+node .agents/skills/tuyaopen-workflow-miniapp-dev/scripts/check_dependencies.mjs
+```
+
+### 步骤 3：跑安全检查（权限、禁用 API）
+
+```bash
+node .agents/skills/tuyaopen-workflow-miniapp-dev/scripts/security_check.mjs
+```
+
+### 步骤 4：查构建产物体积
+
+```bash
+# 构建
+yarn build
+# 看产物体积（要求压缩后 ≤ 5 MB）
+du -sh dist/
 ```
 
 ### 步骤 5：上传
@@ -183,11 +179,18 @@ find cdn -size +500k          # 找超过 500KB 的单个资源
 （P2，参数与报错见 skill `tuyaopen-miniapp`）。**不要**在审核中心绕过 IDE
 上传未签名包。
 
-### 步骤 6：提审 → 发布上线（**只能在网页上做**，IDE 的 STEP 1）
+### 步骤 6：提审 → 发布上线（优先 CLI，支持网页兜底）
 
 **上传 ≠ 发布。** 步骤 5 只是把签名包交付到平台供内测，终端用户看不到。
-提审、灰度、上线、回滚在 IDE 和 `tuyaopen-cli` CLI 里**都没有入口**，只能开浏览器
-去这个**拼好参数**的地址（别只丢首页过去）：
+
+- **CLI 路径**：
+  1. 设置 4 项属性：
+     `tuyaopen-cli devplat exec --yes -- miniapp ui-info-set --miniapp-id <appid> --type <iotUiName|iotUiEnName|iotUiPreviewPicture|iotUiEnPreviewPicture> --value <v> --format json`
+  2. 提交审核（**不可撤回，须征得用户同意**；devplat dry-run 写在 `--` 之后）：
+     `tuyaopen-cli devplat exec --yes -- miniapp submit-review --miniapp-id <appid> --version-id <versionId> --format json`
+  3. 审核通过后发布（全量 100% 发布）：
+     先 `panel miniapp-version-status` 确认通过（`reviewStatus == 2`），再 `panel miniapp-release`。
+- **网页兜底**：若本地 devplat-cli 较旧缺少对应命令或前置图片未上传，开浏览器去拼好参数的地址：
 
 ```
 https://platform.tuya.com/miniapp/version?miniProgramId=<appid>
@@ -200,14 +203,24 @@ https://platform.tuya.com/miniapp/version?miniProgramId=<appid>
 
 在这一页提交审核；审核通过后再在同一页上线。
 
-### 步骤 7：绑定面板小程序到产品（**只能在网页上做**，IDE 的 STEP 2）
+### 步骤 7：绑定面板小程序到产品（优先 CLI，支持网页兜底）
 
 发布完还差一步：**把已发布的面板小程序绑定到产品**，面板才真的会出现在这款
-产品的设备上。绑定关系挂在产品上，本地和 CLI 都做不了：
+产品的设备上：
 
-```
-https://platform.tuya.com/pmg/step?id=<projectId>&tab=operation#PRIVATE
-```
+- **CLI 路径**：
+  1. 查询私有面板列表获取真实 `uiId`（注意：`--ui-id` 是 Panel UI ID，不是 appid）：
+     ```bash
+     tuyaopen-cli devplat exec --yes -- panel ui-list --product-id <PID> --code PRIVATE --format json
+     ```
+  2. 将面板绑定到产品（执行前向用户展示当前绑定并请求确认）：
+     ```bash
+     tuyaopen-cli devplat exec --yes -- panel bind --ui-id <uiId> --product-id <PID> --format json
+     ```
+- **网页兜底**：若未匹配到 `uiId` 或缺少对应权限，可通过网页控制台完成绑定：
+  ```
+  https://platform.tuya.com/pmg/step?id=<projectId>&tab=operation#PRIVATE
+  ```
 
 - `<projectId>` = ⚠ **云端产品 PID**，**不是**小程序 id（字段名叫 projectId，
   装的是 PID——见 `src/miniapp/bindingManager.ts` 的 `readProjectId` /
@@ -219,10 +232,10 @@ https://platform.tuya.com/pmg/step?id=<projectId>&tab=operation#PRIVATE
 **顺序不能反：先发布（步骤 6），再绑定（步骤 7）。** 步骤 7 绑的是一个**已经
 发布**的小程序，步骤 6 没做完就没有东西可挂。
 
-> 三件事别混：`upload` 登记**版本**（唯一有 CLI 命令的一步）、发布把版本**放
-> 出去**、绑定把它**挂到产品上**。**不要**声称"已发布"或"已上线"——本清单
-> 步骤 1–4 跑完只代表**可以上传**；步骤 5 跑完只是内测包；要到步骤 7 做完，
-> 面板才真的到了用户设备上。
+> 三件事别混：`upload` 登记**版本**、发布把版本**放出去**、绑定把它**挂到产品上**。
+> **不要**声称"已发布"或"已上线"——本清单步骤 1–4 跑完只代表**可以上传**；
+> 步骤 5 跑完只是内测包；要到步骤 7 做完，面板才真的到了用户设备上。
+
 
 ---
 
