@@ -1,22 +1,22 @@
 ---
 name: tuyaopen-embedded-build
-description: >-
-  Build and compile TuyaOpen projects via the `tuyaopen-cli firmware build/clean`
-  CLI (IDE-scaffolded projects) or `tos.py build`/`tos.py clean` (raw SDK
-  checkouts), select build configurations, edit Kconfig options, and run
-  Linux ELF binaries. Covers the `tuyaopen-cli config` vs `tos.py config` naming
-  trap. Use when the user mentions compiling, building, tos.py build,
-  tuyaopen-cli firmware build, config choice, menuconfig, Kconfig, build error,
-  or running a project.
-  项目编译、构建、tuyaopen-cli firmware build/clean、编译配置、清理编译、编译错误、
-  menuconfig、Kconfig，以及 tuyaopen-cli config 与 tos.py config 的同名陷阱。
+description: Build and compile TuyaOpen projects via the `tuyaopen-cli firmware build/clean` CLI (IDE-scaffolded projects)
+  or `tos.py build`/`tos.py clean` (raw SDK checkouts), select build configurations, edit Kconfig options, and run Linux ELF
+  binaries. Covers the `tuyaopen-cli config` vs `tos.py config` naming trap. Use when the user mentions compiling, building,
+  tos.py build, tuyaopen-cli firmware build, config choice, menuconfig, Kconfig, build error, or running a project. 项目编译、构建、tuyaopen-cli
+  firmware build/clean、编译配置、清理编译、编译错误、 menuconfig、Kconfig，以及 tuyaopen-cli config 与 tos.py config 的同名陷阱。
 license: Apache-2.0
 compatibility:
-  - tuyaopen CLI, either form — see skill `tuyaopen-start` § 1 (for `tuyaopen-cli firmware build/clean`)
-  - TuyaOpen environment activated (export.sh / export.ps1 / export.bat) — only needed for the `tos.py`-direct path; `tuyaopen-cli firmware build/clean` self-activates
-  - cmake >= 3.28, ninja >= 1.6
+- tuyaopen CLI, either form — see skill `tuyaopen-start` § 1 (for `tuyaopen-cli firmware build/clean`)
+- TuyaOpen environment activated (export.sh / export.ps1 / export.bat) — only needed for the `tos.py`-direct path; `tuyaopen-cli
+  firmware build/clean` self-activates
+- cmake >= 3.28, ninja >= 1.6
+metadata:
+  version: 1.1.3
+  owner: embedded-team
+  deprecated: false
+  min-cli-version: 0.1.0-beta.17
 ---
-
 # TuyaOpen Build
 
 Docs: <https://tuyaopen.ai/docs/quick-start/project-compilation>
@@ -279,3 +279,7 @@ Example (for a project named `hello_world_linux` version 1.0.0):
 Anything outside compiling / cleaning / Kconfig for a TuyaOpen project — not
 in scope here, see skill `tuyaopen-start`'s routing table
 (`references/ROUTING.md`).
+
+## Wiring third-party dependencies into CMake
+
+To wire Arduino, PlatformIO, or third-party C/C++ libraries into the project's `CMakeLists.txt`, read [references/cmake-dependencies.md](references/cmake-dependencies.md). It covers `add_subdirectory`, `target_include_directories`, `target_sources`, and Kconfig module integration.

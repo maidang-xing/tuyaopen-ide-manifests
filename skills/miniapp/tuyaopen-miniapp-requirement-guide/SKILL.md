@@ -1,10 +1,17 @@
 ---
 name: tuyaopen-miniapp-requirement-guide
-id: tuyaopen-miniapp-requirement-guide
-description: >-
-  该技能专门直接输出小程序面板 PRD、面板需求文档与完整 Markdown 模板。只有当用户是在写小程序面板、小程序设备面板或小程序端需求文档时才使用本技能；用户只要提到小程序面板、面板 PRD、需求文档、完整 Markdown 需求文档、完整 Markdown 模板、章节和表格搭出来、空白模板、产品总览、产品基本信息、DP 点说明、四、小程序功能说明、页面功能说明、附件清单，或要求按模板填写、补全、整理、润色、只写某一章、产出可给产品和研发评审的文档，就必须使用本技能。对于通用 PRD、Web、H5、官网、管理后台、中后台、App、桌面端或其他非小程序面板项目，不要使用本技能，也不要影响这些需求文档的正常编写流程。
+description: 该技能专门直接输出小程序面板 PRD、面板需求文档与完整 Markdown 模板。只有当用户是在写小程序面板、小程序设备面板或小程序端需求文档时才使用本技能；用户只要提到小程序面板、面板 PRD、需求文档、完整 Markdown
+  需求文档、完整 Markdown 模板、章节和表格搭出来、空白模板、产品总览、产品基本信息、DP 点说明、四、小程序功能说明、页面功能说明、附件清单，或要求按模板填写、补全、整理、润色、只写某一章、产出可给产品和研发评审的文档，就必须使用本技能。对于通用
+  PRD、Web、H5、官网、管理后台、中后台、App、桌面端或其他非小程序面板项目，不要使用本技能，也不要影响这些需求文档的正常编写流程。
+license: Apache-2.0
+compatibility:
+- tuyaopen CLI, either form — see skill `tuyaopen-start` § 1
+metadata:
+  version: 1.0.3
+  owner: miniapp-team
+  deprecated: false
+  min-cli-version: 0.1.0-beta.17
 ---
-
 ## No `tuyaopen-cli` CLI coverage
 
 `tuyaopen-cli` CLI 有 `miniapp` 命令组，但只覆盖构建 / 安装运行时 / 元数据 / DP schema 同步 / 预览 / 模板 / 上传等命令行操作（详见 skill `tuyaopen-miniapp`）——具体的页面、组件、DP 交互编码不在其列。本技能的开发知识完全来自 `references/` 与项目内文档，不经 `tuyaopen-cli` CLI。
@@ -48,8 +55,6 @@ description: >-
 - 未提供的数据写 `待业务确认`、`待补充链接`、`待补充示意图` 等明确占位。
 - 不编造客户名、团队成员、版本结论、协议参数、链接地址或验收结论。
 
-## 搭配使用 {#usage}
-- 本技能生成 prd 后可使用 requirement-validation-skill(如存在此 skill) 进行需求文档的自动校验，确保输出符合规范。
 
 ## 工作流程 {#workflow}
 
