@@ -98,7 +98,7 @@ for the current set. Resolve `tuyaopen-cli` first per skill `tuyaopen-start` § 
 | 7.5 算下一个版本号 | `panel miniapp-next-version` —— 先拿到号，第 8 步的 `--version` 就是它返回的 `nextVersion` | `tuyaopen-miniapp` |
 | 8. 上传（内测包） | — | `tuyaopen-miniapp`（`tuyaopen-cli miniapp upload --version <nextVersion>`，命令行可做） |
 | **9. 提审** | 命令行优先：`miniapp ui-info-set`（设置四项属性） + `miniapp submit-review`（提交审核）；若宿主缺少命令或图片未就绪走网页提审（带拼好参数的网址） | `tuyaopen-miniapp` |
-| 9.5 查审核状态 → 发布上线 | 命令行可做：`panel miniapp-version-status` 轮到审核通过，再 `panel miniapp-release` | `tuyaopen-miniapp`（前置、失败码、别用 `-wait` 变体） |
+| 9.5 查审核状态 → 发布上线 | 提审后审核通常约 2 分钟：`panel miniapp-version-status` 轮到 `reviewStatus == 2`，再 `panel miniapp-release` | `tuyaopen-miniapp`（前置、失败码、别用 `-wait` 变体） |
 | **10. 绑定面板小程序到产品** | 命令行优先：`panel ui-list --product-id <PID> --code PRIVATE` 查询 `uiId`，再 `panel bind --ui-id <uiId> --product-id <PID>`；异常时走网页绑定（带拼好参数的网址） | `tuyaopen-miniapp` |
 | —— 找文档 / 查 API / 查报错 | [references/info-lookup.md](references/info-lookup.md)（`search_help.py` / `fetch_doc.py` / `validate.mjs`） | — |
 

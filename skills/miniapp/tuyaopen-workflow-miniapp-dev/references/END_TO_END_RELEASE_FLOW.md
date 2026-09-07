@@ -82,12 +82,16 @@ tuyaopen-cli miniapp preview --emit-url
      tuyaopen-cli devplat exec --yes -- miniapp ui-info-set --miniapp-id <appid> --type iotUiPreviewPicture --value "https://..." --format json
      tuyaopen-cli devplat exec --yes -- miniapp ui-info-set --miniapp-id <appid> --type iotUiEnPreviewPicture --value "https://..." --format json
      ```
+     审核预检只要求 URL 非空；若开发期尚无最终截图，可先用产品详情里的类目默认图
+     拼成托管 URL（例如 `https://images.tuyacn.com/<detail.data.icon 或 category icon>`）。
+     正式发布前建议替换为真实面板截图。
   2. **提交审核**：调用 `miniapp submit-review`（底层通过 `version.audit.check:1.0` 预检后发起 `version.review:3.0`，已获得授权）：
      ```bash
      tuyaopen-cli devplat exec --yes -- miniapp submit-review --miniapp-id <appid> --version-id <versionId> --format json
      ```
      `versionId` 来自 `tuyaopen-cli miniapp upload` 的返回值或 `panel miniapp-version-status`。
-  3. **网页兜底**：若本地 devplat-cli 版本过旧缺少 `submit-review`，或提审封面图尚未就绪，自动降级至网页提审链接 `data.webSteps.versionPageUrl`。
+  3. **等待审核完成**：提审后不要立即 release。审核通常约 **2 分钟**（实测可能 40 秒到几分钟），用 `panel miniapp-version-status` 轮询，直到 `reviewStatus == 2`。
+  4. **网页兜底**：若本地 devplat-cli 版本过旧缺少 `submit-review`，或提审封面图尚未就绪，自动降级至网页提审链接 `data.webSteps.versionPageUrl`。
 
 - **绑定自动化**：
   1. **查询 Panel UI ID**：`panel ui-list --code PRIVATE` 查询属于该产品的私有面板：
@@ -99,7 +103,12 @@ tuyaopen-cli miniapp preview --emit-url
      ```bash
      tuyaopen-cli devplat exec --yes -- panel bind --ui-id <uiId> --product-id <PID> --format json
      ```
-  3. **网页兜底**：若返回列表中未匹配到 `uiId`，走网页绑定链接 `data.webSteps.bindProductUrl`，严禁猜测或伪造参数。
+  3. **绑定成功后用当前面板验证**：不要用 `panel ui-list` 的 `isSelected` 判断绑定结果——该字段的语义与 `/api/v5/product/getUIProperty` 不一致。执行：
+     ```bash
+     tuyaopen-cli devplat exec --yes -- product ui-property --product-id <PID> --format json
+     ```
+     返回的 `uiId` 必须等于刚绑定的 `uiId`。
+  4. **网页兜底**：若返回列表中未匹配到 `uiId`，走网页绑定链接 `data.webSteps.bindProductUrl`，严禁猜测或伪造参数。
 
 这两条命令均需要账号具备对应 API 权限。若请求返回 `API_NOT_AUTHORIZED`，请参考 skill `tuyaopen-cloud` 的 Trap 1 申请权限，不要读成"命令不存在"。
 

@@ -74,8 +74,11 @@ tuyaopen-cli firmware build --project-root <项目>   # 先让它 exit 0
    不要只丢一句"你需要一个授权码"就停住，也不要只报其中一条 —— 用户手里有没有
    同事给的 xlsx，你并不知道，摆全了他自己一眼就能挑。
 
-   **两条路都以"用户交给你一份文件或一对码"结束。** 没有第三条：任何"我去帮你
-   申领一下"的想法都是错的，对应的命令不存在。
+**两条路都以"用户交给你一份文件或一对码"结束。** 没有第三条：任何"我去帮你
+申领一下"的想法都是错的，对应的 CLI 命令不存在。两个官方入口是：
+免费额度见 <https://tuyaopen.ai/zh/pricing-guide>，超出额度购买见
+<https://platform.tuya.com/purchase/index?type=6>。先让用户选入口、完成申领/购买，
+再把 xlsx 或一对码交给你。
 
 **衡量标准**：用户读完你这条消息，应该已经知道"我下一步点哪里"，
 而不是还要反问一句"那怎么弄一个"。
@@ -157,7 +160,8 @@ tuyaopen-cli license list --json     # 本地存了哪些（AuthKey 默认打码
 
 | 路径 | 用户做什么 | 你做什么 | 什么时候用 |
 |---|---|---|---|
-| **开发者平台网页申领** | 在产品的「设备授权」/ 授权码页面申领，导出 Excel | 拿到文件后 `tuyaopen-cli license import --xlsx <path>` | 手上还没有码 |
+| **官方免费额度（2 个）** | 打开 <https://tuyaopen.ai/zh/pricing-guide>，按官方指引登录平台并在产品页申领，导出 Excel | 拿到文件后 `tuyaopen-cli license import --xlsx <path>` | 手上还没有码，且只需开发量 |
+| **官方购买** | 打开 <https://platform.tuya.com/purchase/index?type=6>，购买后导出 Excel | 同上 | 需要超过免费额度或生产数量 |
 | **已有的 xlsx** | 把同事/上一批的 xlsx 给你 | 同上 | 团队里已经有一批码 |
 
 只有一对码、没有文件时，走 stdin，别让它上命令行：
