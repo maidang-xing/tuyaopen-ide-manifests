@@ -96,7 +96,10 @@ export const devices = {
 };
 
 /**
- * 注意，如果使用了 SdmProvider 则无需手动调用 init 方法，SdmProvider 会自动调用并在设备初始化完毕后再渲染子组件
+ * 必须对每个 device 显式调用 init()。SdmProvider 只监听 initialized 状态：
+ * 默认要等设备 initialized 后才渲染 children，但不会替你调用 init()。
+ * 如果希望设备未初始化时也渲染界面，可在 SdmProvider 上设置
+ * isNeedMainDeviceInitialized={false}；不要把该属性误当成自动 init()。
  */
 Object.keys(devices).forEach((k: keyof typeof devices) => {
   devices[k].init();
@@ -3074,7 +3077,7 @@ const devices = {
 
 **src/app.tsx**
 
-> 通过 SdmProvider 接入 React 体系
+> 通过 SdmProvider 接入 React 体系。必须先在 `devices/index.ts` 调用 `init()`；SdmProvider 不会自动调用它。若要设备初始化前也渲染，传 `isNeedMainDeviceInitialized={false}`。
 
 ```tsx
 import React from 'react';
@@ -3201,7 +3204,7 @@ const devices = {
 
 **src/app.tsx**
 
-> 通过 SdmProvider 接入 React 体系
+> 通过 SdmProvider 接入 React 体系。必须先在 `devices/index.ts` 调用 `init()`；SdmProvider 不会自动调用它。若要设备初始化前也渲染，传 `isNeedMainDeviceInitialized={false}`。
 
 ```tsx
 import React from 'react';
@@ -3661,7 +3664,7 @@ const devices = {
 
 **src/app.tsx**
 
-> 通过 SdmProvider 接入 React 体系
+> 通过 SdmProvider 接入 React 体系。必须先在 `devices/index.ts` 调用 `init()`；SdmProvider 不会自动调用它。若要设备初始化前也渲染，传 `isNeedMainDeviceInitialized={false}`。
 
 ```tsx
 import React from 'react';

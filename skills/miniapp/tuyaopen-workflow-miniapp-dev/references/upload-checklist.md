@@ -186,8 +186,10 @@ du -sh dist/
 - **CLI 路径**：
   1. 设置 4 项属性：
      `tuyaopen-cli devplat exec --yes -- miniapp ui-info-set --miniapp-id <appid> --type <iotUiName|iotUiEnName|iotUiPreviewPicture|iotUiEnPreviewPicture> --value <v> --format json`
+     开发期可复用产品详情返回的类目默认图托管 URL；审核预检只校验非空，正式发布前替换为真实面板截图。
   2. 提交审核（**不可撤回，须征得用户同意**；devplat dry-run 写在 `--` 之后）：
      `tuyaopen-cli devplat exec --yes -- miniapp submit-review --miniapp-id <appid> --version-id <versionId> --format json`
+     审核通常约 **2 分钟**；不要立即发布，先轮询状态。
   3. 审核通过后发布（全量 100% 发布）：
      先 `panel miniapp-version-status` 确认通过（`reviewStatus == 2`），再 `panel miniapp-release`。
 - **网页兜底**：若本地 devplat-cli 较旧缺少对应命令或前置图片未上传，开浏览器去拼好参数的地址：

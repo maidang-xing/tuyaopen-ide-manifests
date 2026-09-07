@@ -56,8 +56,11 @@ Always unwrap before any DP access — `dpSchema` may be a `{ ok, data }` wrappe
 ```js
 dpSchema    = snapshot.dpSchema?.data ?? snapshot.dpSchema
 dps         = dpSchema?.dps ?? []
-selectedDps = dps.filter(dp => dp.selected === true)
+selectedDps = dps.filter(dp => dp.selected !== false)
 ```
+
+Do not require `selected === true`: custom-DP responses may omit the field;
+only an explicit `false` means "not attached".
 
 Never access `snapshot.dpSchema.dps` directly.
 

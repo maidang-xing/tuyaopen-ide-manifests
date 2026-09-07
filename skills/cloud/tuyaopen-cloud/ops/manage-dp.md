@@ -74,6 +74,9 @@ Use the manual steps below only when you need to inspect intermediate results.
 | Remove one standard DP | `product dp-remove-standard` | Yes |
 | **Add a custom DP** (101–199; the only way for `qt`) | `tuyaopen-cli dp add`, or `product dp-add-custom` through `devplat exec` | Yes |
 
+The first-party `tuyaopen-cli dp add` rejects an explicit `--id` outside
+101-199 before any platform call; omit `--id` to auto-allocate.
+
 > **`dp-add-custom` was missing from this table until 2026-09-02**, and for a `qt`
 > product it is the *only* command that can attach anything — the standard-DP rows
 > above have no catalog to draw from. A tester looking for it here found nothing,
@@ -123,6 +126,23 @@ tuya-devplat-cli product dp-valid --product-id <pid> --format json
 ```
 
 Returns the full DP definitions (including `mode`, `type`, `property`) for DPs attached to the product.
+
+### Keep the local snapshot and codegen in step
+
+`product sync` persists `dp-schema`; `dp generate` reads that local snapshot.
+Before generating code, compare counts:
+
+```bash
+tuyaopen-cli product sync --force --yes
+tuyaopen-cli product info
+tuyaopen-cli dp list
+```
+
+`product sync` reports `dpCount`; `dp generate` fails closed on `dpCount=0`
+instead of silently generating an empty profile. If the platform's
+`dp-valid`/`dp-schema` output has DPs but local sync remains empty, stop and
+fix the platform query/permissions first — do not hand-edit the snapshot for
+production work.
 Use this to inspect the current DP configuration in detail — it is not a pass/fail validation report.
 
 ---
@@ -179,7 +199,8 @@ tuya-devplat-cli product dp-list --product-id <pid> --format json
 # 2. Browse available DPs (selected=false = not yet attached)
 tuya-devplat-cli product dp-standard-catalog --product-id <pid> --format json
 
-# 3. Add DPs by ID (use id values from step 2; for qt, start from 1)
+# 3. Add standard DPs by catalog id. For qt there is no standard catalog:
+#    use dp-add-custom with explicit ids 101-199 instead.
 tuya-devplat-cli product dp-add-standard \
   --product-id <pid> --self-dps '[1,2,3]' --dry-run --format json
 tuya-devplat-cli product dp-add-standard \

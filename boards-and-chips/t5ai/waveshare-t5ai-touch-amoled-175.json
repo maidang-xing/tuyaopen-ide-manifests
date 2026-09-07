@@ -87,6 +87,41 @@
         "height": 466
       }
     ],
+    "imu": [
+      {
+        "model": "QMI8658",
+        "name": {
+          "en": "6-Axis IMU",
+          "zh-CN": "六轴 IMU"
+        },
+        "axes": 6,
+        "interface": "I2C",
+        "pins": {
+          "I2C": [
+            {
+              "role": "scl",
+              "gpio": 20
+            },
+            {
+              "role": "sda",
+              "gpio": 21
+            },
+            {
+              "role": "int",
+              "gpio": 44
+            }
+          ]
+        },
+        "kconfig": null,
+        "note": {
+          "en": "QMI8658 shares I2C0 with the touch controller. Driver lives in the board SDK directory; bus recovery and 0x6B/0x6A fallback are recommended.",
+          "zh-CN": "QMI8658 与触摸共用 I2C0。驱动在板级 SDK 目录中；建议实现总线恢复，并探测 0x6B/0x6A 两个地址。"
+        },
+        "mounting": "onboard",
+        "pinLocked": true,
+        "id": "imu"
+      }
+    ],
     "touchpad": [
       {
         "model": "CST9217",
