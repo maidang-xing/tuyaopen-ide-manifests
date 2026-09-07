@@ -118,7 +118,7 @@ tuyaopen-cli miniapp preview --emit-url
 
 | | `tuyaopen-cli project bind-product --pid <pid>` | `tuya-devplat-cli panel bind --ui-id <uiId> --product-id <pid>` |
 |---|---|---|
-| 改的是 | **本地**：`tuyaopen.project.ini` 的 `[product]` | **平台**：产品上挂哪个面板 |
+| 改的是 | **本地**：`tuyaopen.project.ini` 的 `[product]`；若 `source/miniapp` 存在，还会同步 `project.tuya.json.projectId` | **平台**：产品上挂哪个面板 |
 | 谁需要它 | `miniapp sync-schema`、DP 代码生成 | 手机 App 打开这个产品时显示哪个面板 |
 | 不做的后果 | 本地拿不到 DP，schema 是占位的 | App 里看不到你的面板 |
 

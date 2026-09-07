@@ -82,7 +82,7 @@ the `tuyaopen-start` routing table 的 ⑧（真机扫码看，或去真 IDE 里
 | Ensure the MiniApp runtime is installed in the shared TuyaOpenIDE cache | `tuyaopen-cli miniapp install` (P2) |
 | Write the miniapp's appid into project metadata | `tuyaopen-cli miniapp meta set-appid <appid>` (mutating, but P3 — not gated) |
 | Read the local DP cache and regenerate `source/miniapp/src/devices/schema.ts` | `tuyaopen-cli miniapp sync-schema` (P2) |
-| Start the dev server and hand the user a URL to open in a browser | `tuyaopen-cli miniapp preview` — see § 0.1, this is how a built panel becomes something anyone can look at |
+| Start the dev server and hand the user a URL to open in a browser | `tuyaopen-cli miniapp preview` — see § 0.1, this is how a built panel becomes something anyone can look at. Prefer `--emit-url`; hand the printed URL to the user before upload/review |
 | Browse / apply the template gallery | `tuyaopen-cli miniapp template list` · `template create` (P2) |
 | Build, sign, and upload to the Tuya platform | `tuyaopen-cli miniapp upload` (P2) |
 | List the account's existing miniapps, or create one on the platform | `tuyaopen-cli devplat exec` (P2) — forwards `miniapp list` / `panel create-miniapp`, see § *平台侧* |
