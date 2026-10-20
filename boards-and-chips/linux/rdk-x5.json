@@ -14,16 +14,16 @@
       {
         "id": "alsa-audio",
         "name": {
-          "en": "ALSA audio (ES8326B codec)",
-          "zh-CN": "ALSA 音频（ES8326B 编解码器）"
+          "en": "Carrier-board ALSA audio (ES8326B codec)",
+          "zh-CN": "载板 ALSA 音频（ES8326B 编解码器）"
         },
         "model": "ES8326B",
         "interface": "ALSA",
         "mounting": "onboard",
         "pinLocked": true,
         "note": {
-          "en": "Linux exposes playback and capture on the duplexaudio sound card; headphones and a microphone are external. The current X5 BSP does not register an SDK audio device, and recording/playback have not been validated.",
-          "zh-CN": "Linux 的 duplexaudio 声卡提供播放与采集设备，耳机、麦克风需要外接。当前 X5 BSP 未注册 SDK 音频设备，录音、播放尚未验证。"
+          "en": "Verified inventory for the X5 MD V1.2 reference-carrier setup; custom carriers may differ. Linux exposes playback and capture on the duplexaudio sound card; headphones and a microphone are external. The current X5 BSP does not register an SDK audio device, and recording/playback have not been validated.",
+          "zh-CN": "以下为 X5 MD V1.2 配套参考载板组合的设备信息，自定义载板可能不同。Linux 的 duplexaudio 声卡提供播放与采集设备，耳机、麦克风需要外接。当前 X5 BSP 未注册 SDK 音频设备，录音、播放尚未验证。"
         }
       }
     ],
@@ -31,15 +31,15 @@
       {
         "id": "act-led",
         "name": {
-          "en": "ACT status LED",
-          "zh-CN": "ACT 状态指示灯"
+          "en": "Carrier-board ACT status LED",
+          "zh-CN": "载板 ACT 状态指示灯"
         },
         "interface": "SYSFS",
         "mounting": "onboard",
         "pinLocked": true,
         "note": {
-          "en": "Linux LED-class device: /sys/class/leds/ACT, with the heartbeat trigger by default. This is separate from the power indicators; the current X5 BSP does not register an SDK LED, and application control has not been validated.",
-          "zh-CN": "Linux LED 类设备路径为 /sys/class/leds/ACT，默认使用 heartbeat 心跳触发器，与电源指示灯分开。当前 X5 BSP 未注册 SDK LED，应用控制尚未验证。"
+          "en": "Verified inventory for the X5 MD V1.2 reference-carrier setup; custom carriers may differ. Linux LED-class device: /sys/class/leds/ACT, with the heartbeat trigger by default. This is separate from the power indicators; the current X5 BSP does not register an SDK LED, and application control has not been validated.",
+          "zh-CN": "以下为 X5 MD V1.2 配套参考载板组合的设备信息，自定义载板可能不同。Linux LED 类设备路径为 /sys/class/leds/ACT，默认使用 heartbeat 心跳触发器，与电源指示灯分开。当前 X5 BSP 未注册 SDK LED，应用控制尚未验证。"
         }
       }
     ],
@@ -47,25 +47,22 @@
       {
         "id": "sleep-wakeup-button",
         "name": {
-          "en": "Sleep / wakeup button",
-          "zh-CN": "Sleep / 唤醒按键"
+          "en": "Carrier-board Sleep / wakeup button",
+          "zh-CN": "载板 Sleep / 唤醒按键"
         },
         "interface": "EVDEV",
         "mounting": "onboard",
         "pinLocked": true,
         "note": {
-          "en": "Linux gpio-keys reports KEY_WAKEUP (143); locate its /dev/input/event* node by device name. This is not the keyboard 's' trigger; the current X5 BSP does not register an SDK button, and key handling has not been validated.",
-          "zh-CN": "Linux gpio-keys 上报 KEY_WAKEUP（143），按设备名称定位 /dev/input/event* 节点。这不是键盘 s 触发键；当前 X5 BSP 未注册 SDK 按键，事件处理尚未验证。"
+          "en": "Verified inventory for the X5 MD V1.2 reference-carrier setup; custom carriers may differ. Linux gpio-keys reports KEY_WAKEUP (143); locate its /dev/input/event* node by device name. This is not the keyboard 's' trigger; the current X5 BSP does not register an SDK button, and key handling has not been validated.",
+          "zh-CN": "以下为 X5 MD V1.2 配套参考载板组合的设备信息，自定义载板可能不同。Linux gpio-keys 上报 KEY_WAKEUP（143），按设备名称定位 /dev/input/event* 节点。这不是键盘 s 触发键；当前 X5 BSP 未注册 SDK 按键，事件处理尚未验证。"
         }
       }
     ]
   },
   "links": {
     "schematic": null,
-    "datasheet": {
-      "en": "https://developer.d-robotics.cc/x5_sdk_doc_v2.0.0/en/quick_start/x5_md_user_guide.html",
-      "zh-CN": "https://developer.d-robotics.cc/x5_sdk_doc/quick_start/x5_md_user_guide.html"
-    },
+    "datasheet": null,
     "productPage": null
   },
   "source": {

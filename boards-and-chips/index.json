@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "domain": "boardsAndChips",
-  "publishedAt": "2026-10-19T03:16:07Z",
+  "publishedAt": "2026-10-20T03:45:19Z",
   "items": [
     {
       "id": "tuya-t5-e1",
@@ -1081,12 +1081,36 @@
     {
       "id": "rdk-x5",
       "name": {
+        "en": "DP-X5 SOM",
+        "zh-CN": "DP-X5 SOM"
+      },
+      "manufacturer": "狄拍",
+      "platformId": "linux",
+      "variantId": "linux",
+      "chip": "X5",
+      "summary": {
+        "en": "Dipa DP-X5 SOM compute module based on the D-Robotics X5 (Sunrise 5) SoC (8-core Cortex-A55 @1.5GHz, 10 TOPS BPU), 4GB/8GB LPDDR4 and 32GB/64GB eMMC options, Wi-Fi 6 and Bluetooth 5.4. Requires a carrier board; designed for robotics and industrial vision.",
+        "zh-CN": "狄拍 DP-X5 SOM 核心板采用地瓜 X5（Sunrise 5）芯片，配备八核 Cortex-A55 @1.5GHz CPU 与 10 TOPS BPU，可选 4GB/8GB LPDDR4 内存及 32GB/64GB eMMC 存储，集成 Wi-Fi 6 与蓝牙 5.4。需搭配载板使用，面向机器人、工业视觉等端侧计算应用。"
+      },
+      "tags": [
+        "linux",
+        "ubuntu",
+        "som"
+      ],
+      "image": {
+        "url": "images/rdk-x5/rdk-x5.jpg"
+      },
+      "detailUrl": "boards-and-chips/linux/rdk-x5.json",
+      "published": true,
+      "sdks": [
+        "tuyaopen"
+      ]
+    },
+    {
+      "id": "rdk-x5-board",
+      "name": {
         "en": "RDK X5",
         "zh-CN": "RDK X5"
-      },
-      "brand": {
-        "en": "D-Robotics",
-        "zh-CN": "地瓜机器人"
       },
       "manufacturer": {
         "en": "D-Robotics",
@@ -1096,8 +1120,8 @@
       "variantId": "linux",
       "chip": "X5",
       "summary": {
-        "en": "RDK X5 Module with its carrier board, running Ubuntu AArch64. Cross-compile TuyaOpen applications on the host, then deploy the ELF over SSH. Start with the IoT Switch demo.",
-        "zh-CN": "RDK X5 Module 核心板与配套载板，运行 Ubuntu AArch64。在主机交叉编译 TuyaOpen 应用，通过 SSH 部署 ELF，可从 IoT 开关示例开始。"
+        "en": "D-Robotics RDK X5 all-in-one development board with a Sunrise 5 SoC (8-core Cortex-A55 @1.5GHz, 10 TOPS BPU) and 4GB/8GB LPDDR4. Provides a 40-pin GPIO header, Gigabit Ethernet, four USB 3.0 ports and two MIPI CSI camera interfaces. Supports Ubuntu 22.04 for robotics and vision development.",
+        "zh-CN": "地瓜机器人 RDK X5 一体式开发板，搭载 Sunrise 5 八核 Cortex-A55 @1.5GHz 处理器与 10 TOPS BPU，配备 4GB/8GB LPDDR4 内存。提供 40Pin GPIO、千兆以太网、4 路 USB 3.0 及 2 路 MIPI CSI 摄像头接口，支持 Ubuntu 22.04，面向机器人与视觉应用开发。"
       },
       "tags": [
         "linux",
@@ -1105,9 +1129,9 @@
         "sbc"
       ],
       "image": {
-        "url": "images/rdk-x5/rdk-x5.jpg"
+        "url": "images/rdk-x5-board/rdk-x5-board.jpg"
       },
-      "detailUrl": "boards-and-chips/linux/rdk-x5.json",
+      "detailUrl": "boards-and-chips/linux/rdk-x5-board.json",
       "published": true,
       "sdks": [
         "tuyaopen"
