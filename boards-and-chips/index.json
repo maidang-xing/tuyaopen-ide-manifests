@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "domain": "boardsAndChips",
-  "publishedAt": "2026-09-14T07:29:14Z",
+  "publishedAt": "2026-10-28T00:00:00Z",
   "items": [
     {
       "id": "tuya-t5-e1",
@@ -1985,6 +1985,66 @@
       "image": null,
       "detailUrl": "boards-and-chips/l511g/lynq-l511g-y7.json",
       "published": true,
+      "sdks": [
+        "tuyaopen"
+      ]
+    },
+    {
+      "id": "jieli-ac79-devkitboard-v1-2",
+      "name": {
+        "en": "JL_AC79_DevKitBoard V1.2",
+        "zh-CN": "JL_AC79_DevKitBoard V1.2"
+      },
+      "manufacturer": {
+        "en": "JieLi",
+        "zh-CN": "杰理科技"
+      },
+      "platformId": "jieli",
+      "variantId": "wl82",
+      "summary": {
+        "en": "JieLi AC79/WL82 multimedia development board with TF storage, speaker output, microphone inputs and camera/display expansion interfaces.",
+        "zh-CN": "杰理 AC79/WL82 多媒体开发板，提供 TF 卡、扬声器输出、麦克风输入及摄像头/显示扩展接口。"
+      },
+      "detailUrl": "boards-and-chips/jieli/jieli-ac79-devkitboard-v1-2.json",
+      "published": true,
+      "tags": [
+        "jieli",
+        "wifi",
+        "audio",
+        "camera",
+        "display",
+        "sd-card"
+      ],
+      "sdks": [
+        "tuyaopen"
+      ]
+    },
+    {
+      "id": "jieli-ac792n-develop-v1-2",
+      "name": {
+        "en": "AC792N Develop V1.2",
+        "zh-CN": "AC792N Develop V1.2"
+      },
+      "manufacturer": {
+        "en": "JieLi",
+        "zh-CN": "杰理科技"
+      },
+      "platformId": "jieli",
+      "variantId": "wl83",
+      "summary": {
+        "en": "JieLi AC792N/WL83 multimedia development board with TF storage, analog audio, camera and display expansion, plus a 60-pin multi-purpose header.",
+        "zh-CN": "杰理 AC792N/WL83 多媒体开发板，提供 TF 存储、模拟音频、摄像头和显示扩展，以及 60 针多功能排针。"
+      },
+      "detailUrl": "boards-and-chips/jieli/jieli-ac792n-develop-v1-2.json",
+      "published": true,
+      "tags": [
+        "jieli",
+        "wifi",
+        "audio",
+        "camera",
+        "display",
+        "sd-card"
+      ],
       "sdks": [
         "tuyaopen"
       ]

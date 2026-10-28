@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "domain": "platforms",
-  "publishedAt": "2026-09-18T09:02:56Z",
+  "publishedAt": "2026-10-28T00:00:00Z",
   "items": [
     {
       "id": "t5ai",
@@ -355,6 +355,40 @@
       "image": {
         "url": "images/ec718pm/ec718pm.jpg"
       },
+      "sdks": [
+        "tuyaopen"
+      ],
+      "published": true
+    },
+    {
+      "id": "wl82",
+      "platformId": "jieli",
+      "name": {
+        "en": "JieLi WL82 (AC791)",
+        "zh-CN": "杰理 WL82（AC791）"
+      },
+      "summary": {
+        "en": "JieLi WL82 multimedia SoC platform for the AC79 DevKitBoard; SDK GPIO codes cover ports A–H (0–127).",
+        "zh-CN": "杰理 WL82 多媒体 SoC 平台，适用于 AC79 DevKitBoard；SDK GPIO 编号覆盖 A–H 端口（0–127）。"
+      },
+      "detailUrl": "platforms/jieli/wl82.json",
+      "sdks": [
+        "tuyaopen"
+      ],
+      "published": true
+    },
+    {
+      "id": "wl83",
+      "platformId": "jieli",
+      "name": {
+        "en": "JieLi WL83 (AC792N)",
+        "zh-CN": "杰理 WL83（AC792N）"
+      },
+      "summary": {
+        "en": "JieLi WL83 multimedia SoC platform for AC792N; valid regular GPIOs are PA0–15, PB0–15, PC0–13, PD0–15, PE0–15 and PF0–5.",
+        "zh-CN": "杰理 WL83 多媒体 SoC 平台，适用于 AC792N；普通 GPIO 为 PA0–15、PB0–15、PC0–13、PD0–15、PE0–15、PF0–5。"
+      },
+      "detailUrl": "platforms/jieli/wl83.json",
       "sdks": [
         "tuyaopen"
       ],
