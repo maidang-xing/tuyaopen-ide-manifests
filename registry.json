@@ -16,7 +16,7 @@
     },
     "demos": {
       "url": "demos/index.json",
-      "version": "1.2.1",
+      "version": "1.2.2",
       "summary": "示例工程"
     },
     "skills": {
