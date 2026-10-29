@@ -49,11 +49,6 @@ jobs:
           for dir in boards-and-chips demos platforms skills miniapp-templates; do
             [ -d "$dir" ] && cp -r "$dir" staging/ && echo "  + $dir/"
           done
-          # Keep full-resolution working/source artwork in Git for maintainers,
-          # but do not ship it to IDE users. Manifest indexes point at the
-          # derived display images; these source files are only referenced by
-          # image README files and are not runtime assets.
-          find staging -type f \( -name '*-source.png' -o -name 'source-original.jpg' \) -delete
           # Both product lines ship (2026-09-02). Until now `skills/TuyaOS/`
           # was deleted here, because registry.json pointed the skills domain at
           # skills/TuyaOpen/index.json and nothing could ever have installed the
